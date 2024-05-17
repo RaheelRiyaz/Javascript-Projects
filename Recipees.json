@@ -1,0 +1,113 @@
+[
+  {
+    "name": "Chicken Pizza",
+    "category": "pizza",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDoe06tA429UJC4pZ43Ks8Nd8apeu7aP234WLCvRgCSg4E9LveggOTwRPL45Yvwp1ARBQ&usqp=CAU"
+  },
+
+  {
+    "name": "Chicken Biryani",
+    "category": "biryani",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNSzNNNy4XSioJvltajgtvmXKRTfF6ShYToiQegziKUUfbb0-0bzXtIpyV6z4aGaMNjpU&usqp=CAU"
+  },
+
+  {
+    "name": "Cheese Pizza",
+    "category": "pizza",
+    "url": "https://api.pizzahut.io/v1/content/en-in/in-1/images/pizza/double-cheese.3c8885f8bc6f18facedc7626368f5105.1.jpg"
+  },
+
+  {
+    "name": "Mutton Biryani",
+    "category": "biryani",
+    "url": "https://bfoodale.com/uploads/2021/12/Mutton-Biryani.jpg"
+  },
+
+  {
+    "name": "Chicken Momos",
+    "category": "momos",
+    "url": "https://geekrobocook.com/wp-content/uploads/2021/03/44_Vegetable-Momos.jpg"
+  },
+
+  {
+    "name": "Mutton Momos",
+    "category": "momos",
+    "url": "https://d4t7t8y8xqo0t.cloudfront.net/resized/750X436/eazytrendz%2F3260%2Ftrend20211214061250.jpg"
+  },
+
+  {
+    "name": "Mutton Pizza",
+    "category": "pizza",
+    "url": "https://mustardwithmutton.files.wordpress.com/2012/10/pa142280.jpg"
+  },
+
+  {
+    "name": "Veg Biryani",
+    "category": "biryani",
+    "url": "https://www.indianhealthyrecipes.com/wp-content/uploads/2019/04/veg-biryani-recipe.jpg"
+  },
+
+  {
+    "name": "Steamed Momos",
+    "category": "momos",
+    "url": "https://www.bigbasket.com/media/uploads/recipe/w-l/3506_2_1.jpg"
+  },
+
+  {
+    "name": "Veg Pizza",
+    "category": "pizza",
+    "url": "https://www.ruchiskitchen.com/wp-content/uploads/2016/02/veggie-pizza-3-1.jpg"
+  },
+
+  {
+    "name": "Fried Momos",
+    "category": "momos",
+    "url": "https://c.ndtvimg.com/2020-08/dvgjshtg_fried-momos_625x300_25_August_20.jpg"
+  },
+
+  {
+    "name": "Fish Kaanti",
+    "category": "fish",
+    "url": "https://i0.wp.com/www.foodfellas4you.com/wp-content/uploads/2014/08/image393.jpg"
+  },
+
+  {
+    "name": "Chicken Shorma",
+    "category": "shorma",
+    "url": "https://hips.hearstapps.com/hmg-prod/images/190130-chicken-shwarma-horizontal-1549421250.png?crop=1.00xw:0.752xh;0,0.123xh&resize=1200:*"
+  },
+
+  {
+    "name": "Mutton Shorma",
+    "category": "shorma",
+    "url": "https://marmaris.sg/assets/images/dishes/Shawarmamutton.webp"
+  },
+  {
+    "name": "Boneless Fish",
+    "category": "fish",
+    "url": "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/ofgu81xyoogzhg3ylov7"
+  },
+
+  {
+    "name": "Chicken Roll",
+    "category": "chicken roll",
+    "url": "https://allchickenrecipe.com/wp-content/uploads/2020/05/Chicken-Roll.jpg"
+  },
+
+  {
+    "name": "Chicken Kathi Roll",
+    "category": "chicken",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToUvClYmPsUIJufZPLc0oGAmyK1-BHwOKtcQVj_ChUAPmRy2aYMOXy_zNtvNv_rh-CSWw&usqp=CAU"
+  },
+  {
+    "name": "Shorma",
+    "category": "shorma",
+    "url": "https://b.zmtcdn.com/data/dish_photos/048/2438028cfe65abc8ca5d32b36356d048.jpg"
+  },
+
+  {
+    "name": "Fried Fish",
+    "category": "fish",
+    "url": "https://i.ytimg.com/vi/o8lDCY2_jyw/maxresdefault.jpg"
+  }
+]

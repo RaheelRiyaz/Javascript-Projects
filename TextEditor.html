@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="shortcut icon" href="" type="image/x-icon" id="favIconLink" />
+    <style>
+      button:not(#rule) {
+        background: white;
+        border-radius: 4px;
+        border: 2px solid;
+        outline: 0;
+        margin-left: 13px;
+      }
+      #heading {
+        border-radius: 3px;
+      }
+      #rule {
+        background: white;
+        border-radius: 4px;
+        border: 1px solid;
+        outline: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div class="card mx-auto mt-2" style="width: 90%; height: 90vh">
+      <div class="card-body">
+        <div class="controls">
+          <button class="btn" id="bold">
+            <i class="fa-solid fa-bold"></i>
+          </button>
+          <button class="btn" id="italic">
+            <i class="fa-solid fa-italic"></i>
+          </button>
+          <button class="btn" id="underline">
+            <i class="fa-solid fa-underline"></i>
+          </button>
+          <button class="btn" id="align-left">
+            <i class="fa-solid fa-align-left"></i>
+          </button>
+          <button class="btn" id="align-center">
+            <i class="fa-solid fa-align-center"></i>
+          </button>
+          <button class="btn" id="align-right">
+            <i class="fa-solid fa-align-right"></i>
+          </button>
+        </div>
+        <select name="heading" id="heading" class="mt-2 ms-2">
+          <option value="">H1</option>
+          <option value="">H2</option>
+          <option value="">H3</option>
+        </select>
+        <div class="bottom-controls">
+          <button id="rule" class="btn mt-2 ms-2">
+            Insert Horizontal Rule
+          </button>
+          <select
+            name="heading"
+            id="font-family"
+            class="mt-2 ms-2"
+            oninput="changeFontFamily(event)"
+          >
+            <option value="Arial, Helvetica, sans-serif">Aerial</option>
+            <option value="Courier New', Courier, monospace">Monospace</option>
+            <option value="Times New Roman', Times, serif">Serif</option>
+            <option value="cursive">Cursive</option>
+            <option value="fantasy">Fantasy</option>
+          </select>
+          <select
+            name="heading"
+            id="fontsize"
+            class="mt-2 ms-2"
+            onchange="changeFontSize(event)"
+          >
+            <option value="10px">1</option>
+            <option value="20px">2</option>
+            <option value="30px">3</option>
+            <option value="40px">4</option>
+            <option value="50px">5</option>
+          </select>
+          <label for="fontcolor" class="ms-3">Font Color</label>
+          <input
+            type="color"
+            name="fontcolor"
+            id="fontcolor"
+            oninput="changeFontColor(event)"
+          />
+        </div>
+        <div class="form-floating mt-3">
+          <textarea
+            class="form-control"
+            placeholder="Text here"
+            id="floatingTextarea2"
+            style="height: 100%; resize: none"
+            rows="24"
+          ></textarea>
+          <label for="floatingTextarea2">Write Text Here</label>
+        </div>
+      </div>
+    </div> -->
+
+    <form onsubmit="submitForm(event)">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          name="email"
+        />
+        <div id="emailHelp" class="form-text">
+          We'll never share your email with anyone else.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          name="password"
+        />
+      </div>
+      <div class="mb-3 form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exampleCheck1"
+          name="checkBox"
+        />
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <script>
+      const textArea = document.querySelector("textarea");
+      document.querySelectorAll(".btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          if (e.target.id === "bold") {
+            textArea.style.fontWeight = "bold";
+          } else if (e.target.id === "italic") {
+            textArea.style.fontStyle = "italic";
+          } else if (e.target.id === "underline") {
+            textArea.style.textDecoration = "underline";
+          } else if (e.target.id === "align-center") {
+            textArea.style.textAlign = "center";
+          } else if (e.target.id === "align-right") {
+            textArea.style.textAlign = "right";
+          } else if (e.target.id === "align-left") {
+            textArea.style.textAlign = "left";
+          }
+        });
+      });
+      function changeFontSize(e) {
+        textArea.style.fontSize = e.target.value;
+      }
+      function changeFontColor(e) {
+        textArea.style.color = e.target.value;
+      }
+      function changeFontFamily(e) {
+        textArea.style.fontFamily = e.target.value;
+      }
+
+      const nums = [1, 4, 7, 8, 3, 5];
+      const target = 11;
+      function getTwoPossibleNumbers() {
+        let num1;
+        let num2;
+        nums.map((x) => {
+          nums.map((y) => {
+            if (x + y === target) {
+              num1 = x;
+              num2 = y;
+              return;
+            }
+          });
+        });
+        num1 = nums.findIndex((x) => x === num1);
+        num2 = nums.findIndex((x) => x === num2);
+        return { num1, num2 };
+      }
+      console.log(getTwoPossibleNumbers());
+      function submitForm(e) {
+        e.preventDefault();
+        const formdataObj = Object.fromEntries(new FormData(e.target));
+        if (formdataObj.checkBox) {
+          console.log(formdataObj);
+        } else {
+          document.body.insertAdjacentHTML(
+            "afterbegin",
+            `<div onclick="removeChildNode(event)" class="alert alert-warning" role="alert">
+Please check out the checkbox!
+
+</div>`
+          );
+          setTimeout(() => {
+            document.body.removeChild(document.querySelector(".alert"));
+          }, 1000);
+        }
+      }
+      class Student {
+        constructor() {
+          this.students = [
+            {
+              name: "raheel",
+              class: "12th",
+              address: "barzulla",
+            },
+            {
+              name: "suhail",
+              class: "11th",
+              address: "Kupwara",
+            },
+            {
+              name: "Burhan",
+              class: "12th",
+              address: "Bulbulbagh",
+            },
+          ];
+        }
+      }
+
+      class Employee {
+        name;
+        email;
+        address;
+        constructor(name, email, address) {
+          this.address = address;
+          this.email = email;
+          this.name = name;
+        }
+      }
+      class EmployeeResponse {
+        id;
+        name;
+        email;
+        address;
+        constructor(name, email, address) {
+          this.address = address;
+          this.email = email;
+          this.name = name;
+          this.id = new Date().getMilliseconds();
+        }
+      }
+      const list = [
+        new Employee("Raheel", "raheel@gmail.com", "Barzulla"),
+        new Employee("Burhan", "burhan@gmail.com", "Bulbulbagh"),
+        new Employee("Suhail", "suhail@gmail.com", "Kupwara"),
+        new Employee("Danish", "danish@gmail.com", "Kenhama"),
+      ];
+      console.log(list);
+      function changeObjectToStudentResponse(object) {
+        if (Array.isArray(object)) {
+          let list = [];
+          object.map((obj) => {
+            list.push(new EmployeeResponse(obj.name, obj.email, obj.address));
+          });
+          return list;
+        } else {
+          return new EmployeeResponse(
+            object.name,
+            object.email,
+            object.address
+          );
+        }
+      }
+      console.log(changeObjectToStudentResponse(list));
+      const numbers = [
+        {
+          name: "raheel",
+          email: "raheel@gmail.com",
+        },
+        {
+          name: "suhail",
+          email: "suhail@gmail.com",
+        },
+        {
+          name: "burhan",
+          email: "burhan@gmail.com",
+        },
+        {
+          name: "subail",
+          email: "subail@gmail.com",
+        },
+      ];
+      // let y = numbers.find((x) => {
+      //   return x === 1;
+      // });
+      // console.log(y);
+
+      function FindIndex(array, fun) {
+        let result;
+        for (let index = 0; index < array.length; index++) {
+          if (fun(array[index])) {
+            result = index;
+            break;
+          }
+        }
+        return result;
+      }
+      console.log(
+        FindIndex(numbers, (num) => {
+          return num.name === "burhan";
+        })
+      );
+      function MapFun(array, fun) {
+        for (let index = 0; index < array.length; index++) {
+          fun(array[index]);
+        }
+      }
+      MapFun(numbers, (x) => {
+        console.log(x);
+      });
+      function Filter(array, fun) {
+        let result = [];
+        for (let index = 0; index < array.length; index++) {
+          if (fun(array[index])) {
+            result.push(array[index]);
+          }
+        }
+        return result;
+      }
+      console.log(
+        Filter(numbers, (x) => {
+          return x.name.startsWith("s");
+        })
+      );
+      const favIconLink = document.querySelector("#favIconLink");
+      let favicons = [
+        "./Images/favicon1.gif",
+        "./Images/favicon2.png",
+        "./Images/favicon3.png",
+      ];
+      let index = 0;
+      setInterval(() => {
+        index >= favicons.length ? (index = 0) : index++;
+        favIconLink.href = favicons[index];
+      }, 1000);
+    </script>
+  </body>
+</html>

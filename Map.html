@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Location</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <style>
+      /* Set the map container's height */
+      #map {
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="searchInput" placeholder="Search for a location" />
+    <button onclick="searchLocation()">Search</button>
+    <div id="map"></div>
+    <button onclick="submitLocation()">Submit Location</button>
+    <!-- Added Submit Button -->
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      var map = L.map("map").setView([0, 0], 13);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+      }).addTo(map);
+
+      var marker;
+
+      function onMapClick(e) {
+        if (marker) {
+          map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+      }
+
+      map.on("click", onMapClick);
+
+      function searchLocation() {
+        var searchInput = document.getElementById("searchInput").value;
+
+        if (searchInput) {
+          // Use Nominatim API to search for location
+          fetch(
+            "https://nominatim.openstreetmap.org/search?format=json&q=" +
+              encodeURIComponent(searchInput)
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.length > 0) {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+
+                // Set the map view to the found location
+                map.setView([lat, lon], 13);
+
+                if (marker) {
+                  map.removeLayer(marker);
+                }
+                marker = L.marker([lat, lon]).addTo(map);
+              } else {
+                alert("Location not found.");
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        } else {
+          alert("Please enter a location to search.");
+        }
+      }
+
+      function submitLocation() {
+        if (marker) {
+          var latitude = marker.getLatLng().lat;
+          var longitude = marker.getLatLng().lng;
+
+          var data = {
+            state: "string",
+            city: "string",
+            region: "string",
+            street: "string",
+            postalCode: 0,
+            longitude: longitude,
+            latitude: latitude,
+            addressLine: "string",
+            entityId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          };
+        }
+        console.log(data);
+      }
+      // Send data to your API endpoint using fetch
+    </script>
+  </body>
+</html>

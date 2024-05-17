@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
+  <style>
+    body {
+      height: auto;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+    }
+    .palette {
+      height: auto;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+  </style>
+  <body>
+    <div class="palette"></div>
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="btn btn-danger me-3" onclick="generatePalette(num-=5)">
+        Load Less
+      </button>
+      <button class="btn btn-primary me-3" onclick="generatePalette(num+=5)">
+        Load More
+      </button>
+    </div>
+  </body>
+  <script>
+    let num = 10;
+    function generatePalette(number) {
+      document.querySelector(".btn-danger").disabled = false;
+      if (number > 0) {
+        document.querySelector(".palette").innerHTML = "";
+        for (let index = 0; index <= number; index++) {
+          let color = `rgba(${Math.floor(Math.random() * 256)},${Math.floor(
+            Math.random() * 256
+          )},${Math.floor(Math.random() * 256)})`;
+          document.querySelector(".palette").innerHTML += `
+        <div class="card m-2" style="width: 18rem;background:${color}">
+  <div class="card-body">
+    <h5 class="card-title">Color Palette no ${index}</h5>
+    <h4 class="card-subtitle mb-2 text-danger">${color}</h4>
+  </div>
+</div>`;
+        }
+      } else {
+        num = 5;
+        document.querySelector(".btn-danger").disabled = true;
+      }
+    }
+    generatePalette(num);
+  </script>
+</html>

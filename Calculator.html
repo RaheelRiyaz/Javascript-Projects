@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    
+  </head>
+  <body>
+    <div
+      class="card mt-5 shadow p-3 mb-5 bg-body-tertiary rounded m-auto"
+      style="width: 18rem; border: 0"
+    >
+      <div class="card-body">
+        <h5 class="card-sub card-subtitle text-body-secondary text-end"></h5>
+        <h2 class="card-title text-end"></h2>
+        <hr />
+        <div class="buttons">
+          <button class="clear">C</button>
+          <button class="cut">x</button>
+          <button class="main">%</button>
+          <button class="main">/</button>
+          <button>7</button>
+          <button>8</button>
+          <button>9</button>
+          <button class="main">*</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button class="main">-</button>
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button class="main">+</button>
+          <button>0</button>
+          <button class="main">.</button>
+          <button class="equals">=</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function $(element) {
+        return document.querySelector(element);
+      }
+      function $All(element) {
+        return document.querySelectorAll(element);
+      }
+      $All("button").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          if (btn.classList.contains("equals")) {
+            $(".card-title").innerText = eval($(".card-title").innerText);
+          } else if (btn.classList.contains("clear")) {
+            $(".card-title").innerHTML = "";
+            $(".card-sub").innerHTML = "";
+          } else if (btn.classList.contains("cut")) {
+            $(".card-title").innerHTML = $(".card-title").innerHTML.slice(
+              0,
+              $(".card-title").innerHTML.length - 1
+            );
+          } else {
+            $(".card-title").innerText += e.target.innerText;
+            try {
+              $(".card-sub").innerHTML = eval($(".card-title").innerHTML);
+            } catch {}
+          }
+        });
+      });
+      // practice for server
+      function first(s) {
+        console.log("i am first function");
+        s(third);
+      }
+      first(second);
+      function second(t) {
+        console.log("i am second function");
+        t(fourth);
+      }
+      function third(f) {
+        console.log("i am third function");
+        f();
+      }
+      function fourth() {
+        console.log("i am fourth function");
+      }
+
+      function FullName(firstName, secondName) {
+        console.log(
+          `My full Name is ${firstName("raheel")} ${secondName("riyaz")}`
+        );
+      }
+      FullName(
+        (fName) => {
+          return fName;
+        },
+        (sName) => {
+          return sName;
+        }
+      );
+      // function Use(fn1, fn2) {
+      //   if (fn1()) {
+      //     fn2();
+      //   } else {
+      //     return;
+      //   }
+      // }
+      // Use(
+      //   () => {
+      //     return true;
+      //   },
+      //   () => {
+      //     console.log("I am use function");
+      //   }
+      // );
+      // console.log("after use");
+
+      // const App = {
+      //   Use: (fn1, fn2) => {
+      //     if (fn1(10)) {
+      //       fn2();
+      //     }
+      //     return;
+      //   },
+      // };
+      // App.Use(
+      //   () => {
+      //     return false;
+      //   },
+      //   () => {}
+      // );
+      // App.Use(
+      //   (num) => {
+      //     return num > 8;
+      //   },
+      //   () => {
+      //     document.body.style.background = "red";
+      //   }
+      // );
+      // function A(b){
+      //   console.log("A");
+      //   b(C);
+      // }
+      // A(B)
+      // function B(c){
+      //   console.log("B");
+      //   c(D);
+      // }
+      // function C(d){
+      //   console.log("C");
+      //   d()
+      // }
+      // function D(){
+      //   console.log("D");
+      // }
+      // practice for server
+
+      // Quiz
+      const nums = [1, 3, 4, 6, 7];
+      const result = 10;
+      function getTwoNumbers() {
+        let num1;
+        let num2;
+        for (const num of nums) {
+          num1 = num;
+          for (const num of nums) {
+            num2 = num;
+            if (num1 + num2 === result) {
+              return [num1, num2];
+            }
+          }
+        }
+      }
+      console.log(getTwoNumbers());
+      const numbers = [1, 9, 4, 5, 6, 7, 8, 9];
+      const res = 10;
+      function getThreeNumbers() {
+        let num1;
+        let num2;
+        let num3;
+        for (const num of numbers) {
+          num1 = num;
+          console.log("first loop " + num);
+          for (let index = 1; index < numbers.length; index++) {
+            num2 = numbers[index];
+            console.log("second loop " + numbers[index]);
+            for (let index = 2; index < numbers.length; index++) {
+              num3 = numbers[index];
+              console.log("third loop " + numbers[index]);
+              // if(num1+num2+num3===res) return [num1,num2,num3]
+            }
+          }
+        }
+        return null;
+      }
+      // Quiz
+      const numbs = [1, 2, 5, 6, 9, 97, 45, 67, 87, 55];
+      let smallestNumber = 1000000;
+      let largestNumber = 0;
+      numbs.map((num, index) => {
+        if (num > largestNumber) {
+          largestNumber = num;
+        }
+      });
+      numbs.map((num) => {
+        if (num < smallestNumber) {
+          smallestNumber = num;
+        }
+      });
+      // console.log(largestNumber);
+      // console.log(smallestNumber);
+      function checkPalindrome(input) {
+        console.log(input);
+        const LHS = input.slice(0, Math.floor(input.length / 2));
+        const RHS = [...input.slice(-Math.floor(input.length / 2))]
+          .reverse()
+          .join("");
+        console.log(LHS);
+        console.log(RHS);
+        if (LHS === RHS) {
+          return "Yes it is Palindrome";
+        }
+        return "It is not a Palindrome";
+      }
+      console.log(checkPalindrome("burrub"));
+      let arr1 = [];
+      let arr2 = [];
+      let resArray = [];
+      const array = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 5, 6, 0, 0];
+      array.map((num) => {
+        if (!arr1.includes(num)) {
+          arr1.push(num);
+        } else {
+          arr2.push(num);
+        }
+      });
+      arr2.map((num) => {
+        if (!resArray.includes(num)) resArray.push(num);
+      });
+      console.log(resArray);
+      const words = [
+        "bat",
+        "cat",
+        "mat",
+        "rat",
+        "nap",
+        "not",
+        "hot",
+        "bot",
+        "pot",
+        "vip",
+        "zip",
+        "bet",
+      ];
+      const letters = [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "r",
+        "t",
+        "p",
+        "n",
+        "m",
+      ];
+      function getWord() {
+        let word = [];
+        let res = [];
+        letters.map((letter) => {
+          word[0] = letter;
+          for (let index = 0; index < letters.length; index++) {
+            word[1] = letters[index];
+            for (let index = 0; index < letters.length; index++) {
+              word[2] = letters[index];
+              if (words.includes(word.join(""))) {
+                res.push(word.join(""));
+              }
+            }
+          }
+        });
+        return `These are the words which have been made from given letters and which matches the given words array ${res}`;
+      }
+      console.log(getWord());
+      console.log("New DSA");
+      // mom
+      // DSA
+      const input = [1, 2, 3, 4];
+      const output = [];
+      for (let index = 0; index < input.length; index++) {
+        output.push(
+          input.filter((num) => num !== input[index]).reduce((x, y) => x * y)
+        );
+      }
+      console.log(output);
+      console.log("New DSA");
+
+      // console.log(input.slice(0,1));
+      // DSA
+      // Anagram DSA
+
+      function check() {
+        const s = "anagram";
+        const arr = [...s].sort();
+        const r = [..."nagraam"].sort();
+        if (r.join("") == arr.join("")) console.log("true");
+        else console.log("false");
+      }
+      check();
+      // Anagram DSA
+      class Manager {
+        team;
+        constructor(team) {
+          this.team = team;
+        }
+      }
+      class Teacher extends Manager {
+        salary;
+        constructor(salary, team) {
+          super(team);
+          console.log("parent");
+          this.salary = salary;
+        }
+      }
+      class Student extends Teacher {
+        name;
+        email;
+        constructor(team, salary, name, email) {
+          super(salary, team);
+          (this.name = name), (this.email = email);
+        }
+        showDetails() {
+          console.log(
+            `This is team ${this.team} with email ${this.email} and salary ${this.salary}`
+          );
+        }
+      }
+      new Student(
+        "Team Alpha",
+        20000,
+        "Raheel",
+        "rahilriyaz27@gmail.com"
+      ).showDetails();
+      console.log(new Teacher(30000, "Team Beta"));
+      console.log(new Manager("Team Gama"));
+      class Principal {
+        name;
+        quarter;
+        // constructor(){}
+      }
+      console.log(new Principal());
+      const a = [1, 2, 3, 4];
+      function Check() {
+        let b = [];
+        a.map((a) => {
+          if (!b.includes(a)) {
+            b.push(a);
+          }
+        });
+        if (a.join("") === b.join("")) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+      // console.log(Check());
+      const strArr = ["javascript", "loves", "you"];
+      let encoded = "";
+      strArr.map((str) => {
+        encoded += str + ":;";
+      });
+      let u = [...encoded];
+      let decodedArr = [];
+      u = u.filter((u) => {
+        return u !== ":" && u !== ";";
+      });
+      let c = [];
+      let resultt = "";
+      u.map((u) => {
+        resultt += u;
+        if (strArr.includes(resultt)) {
+          c.push(resultt);
+          resultt = "";
+        }
+      });
+      console.log(c);
+    </script>
+  </body>
+</html>

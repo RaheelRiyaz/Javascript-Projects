@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter App</title>
+    <style>
+      .card {
+        height: 20vh;
+        border-radius: 40px;
+        margin: 35vh auto;
+        width: 20vw;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 20px;
+        flex-direction: column;
+        background-color: #539553;
+      }
+      button {
+        height: 24px;
+        width: 70px;
+        background-color: black;
+        border-radius: 8px;
+        border: 0;
+        color: white;
+        cursor: pointer;
+        padding: 4px;
+        margin: 5px;
+      }
+      button:nth-child(1) {
+        background-color: red;
+      }
+      button:nth-child(3) {
+        background-color: green;
+      }
+      .controls {
+        margin-bottom: 20px;
+      }
+      .score {
+        color: white;
+      }
+      .reset-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #auto {
+        background-color: #5ef55e;
+        color: black;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }
+      .animate {
+        animation-name: haha;
+      }
+      #stop {
+        margin-bottom: 10px;
+      }
+      @keyframes haha {
+        from {
+          color: black;
+        }
+        to {
+          color: white;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div><h1 class="score">0</h1></div>
+      <div class="controls">
+        <button id="dec">Decrease</button>
+        <button id="reset">Reset</button>
+        <button id="inc">Increase</button>
+      </div>
+      <div class="reset-controls">
+        <button id="auto" class="hello">Auto</button>
+        <button id="stop">Stop</button>
+      </div>
+    </div>
+    <script>
+      let score = 0;
+      const btns = document.querySelectorAll("button");
+      let interval;
+      btns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          document.querySelector("#auto").classList.remove("animate");
+          if (e.target.id !== "auto" || e.target.id === "stop")
+            clearInterval(interval);
+          switch (e.target.id) {
+            case "dec":
+              score--;
+              break;
+            case "inc":
+              score++;
+              break;
+            case "auto":
+              e.target.classList.add("animate");
+              interval = setInterval(() => {
+                score++;
+                document.querySelector(".score").innerHTML = score;
+              }, 100);
+              break;
+            case "reset":
+              score = 0;
+              break;
+          }
+          document.querySelector(".score").innerHTML = score;
+        });
+      });
+    </script>
+  </body>
+</html>

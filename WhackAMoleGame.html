@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whack a mole</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .mole {
+        height: 100px;
+        width: 100px;
+        background-color: black;
+        border-radius: 50%;
+        transition: all 0.3s ease-in-out;
+      }
+      .moles {
+        display: flex;
+        width: 100vw;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .active {
+        height: 0;
+        width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" style="width: 40rem">
+      <h1 class="text-center">Whack A Mole ! <span class="score">0</span></h1>
+      <div class="moles d-flex">
+        <div class="mole" onclick="incrementScore()"></div>
+        <div class="mole" onclick="incrementScore()"></div>
+        <div class="mole" onclick="incrementScore()"></div>
+        <div class="mole" onclick="incrementScore()"></div>
+      </div>
+      <button onclick="startGame(event)">Start</button>
+    </div>
+    <script>
+      const moles = document.querySelectorAll(".mole");
+      function startGame(event) {
+        event.target.style.display = "none";
+        setInterval(() => {
+          document.querySelector(".active")?.classList.remove("active");
+          moles[Math.floor(Math.random() * moles.length)].classList.add(
+            "active"
+          );
+        }, 500);
+      }
+      let score = 0;
+      function incrementScore() {
+        score++;
+        document.querySelector(".score").innerHTML = score;
+      }
+    </script>
+  </body>
+</html>

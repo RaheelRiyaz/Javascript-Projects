@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preloader</title>
+    <style>
+      .circles {
+        height: 70px;
+        width: 120px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 50px auto;
+      }
+      .circles div {
+        background-color: black;
+        border-radius: 50%;
+        transition: all 0.3s ease-in-out;
+      }
+      .circle-1 {
+        height: 30px;
+        width: 30px;
+      }
+      .circle-2 {
+        height: 20px;
+        width: 20px;
+      }
+      .circle-3 {
+        height: 10px;
+        width: 10px;
+      }
+      .circle-4 {
+        height: 5px;
+        width: 5px;
+      }
+      .active {
+        transform: translateY(-20px);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="preloader-section">
+      <div class="circles">
+        <div class="circle-1"></div>
+        <div class="circle-2"></div>
+        <div class="circle-3"></div>
+        <div class="circle-4"></div>
+      </div>
+
+      <input type="file" name="" id="file" draggable="true" multiple="true" />
+
+      <div id="images"></div>
+    </section>
+
+    <script>
+      const circles = document.querySelectorAll(".circles div");
+      function preloading() {
+        document.querySelector(".active")?.classList.remove("active");
+        circles[Math.floor(Math.random() * circles.length)].classList.add(
+          "active"
+        );
+      }
+      setInterval(() => preloading(), 300);
+
+      Object.prototype.forEach = function (cb) {
+        for (const item of this) {
+          cb(item);
+        }
+      };
+
+      file.addEventListener("change", uploadImage);
+
+      function uploadImage() {
+        const files = this.files;
+        files.forEach((file) => {
+          const img = document.createElement("img");
+          const src = URL.createObjectURL(file);
+          // img.style.width = "200px";
+          // img.src = src;
+          // img.id = "img";
+          // img.draggable = true;
+          // images.prepend(img);
+          // img.onclick = deleteImage;
+
+          images.insertAdjacentHTML(
+            "beforeEnd",
+            `<img id="img" src="${src}" onclick="deleteImage(event)"></img>`
+          );
+        });
+      }
+
+      function deleteImage(e) {
+        const imagesCollection = [...document.querySelectorAll("#img")]
+          .map((_) => {
+            if (_ !== e.target) {
+              return `<img id="img" src="${_.src}" onclick="deleteImage(event)"></img>`;
+            }
+          })
+          .filter((_) => _ !== undefined);
+        images.innerHTML = imagesCollection;
+      }
+    </script>
+  </body>
+</html>

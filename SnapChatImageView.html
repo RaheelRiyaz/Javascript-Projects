@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snapchat</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 888;
+        display: none;
+      }
+      .show {
+        display: block;
+      }
+      .container {
+        padding: 2rem 0rem;
+      }
+
+      h4 {
+        margin: 2rem 0rem 1rem;
+      }
+
+      td,
+      th {
+        vertical-align: middle;
+      }
+      td img {
+        width: 100px;
+        object-fit: cover;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      class="img"
+      src="https://images.unsplash.com/photo-1538991383142-36c4edeaffde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1742&q=80"
+      alt=""
+    />
+    <div
+      class="card mt-5 mx-auto"
+      style="width: 18rem; border: 0; cursor: pointer"
+    >
+      <div class="card-body d-flex justify-content-center align-items-center">
+        <i
+          class="fa-solid fa-square me-3 mb-1"
+          onclick="viewImage(event)"
+          ondblclick="replay(event)"
+        ></i>
+        <h5 class="card-title">View Snap</h5>
+      </div>
+    </div>
+    <script>
+      const img = document.querySelector("img");
+      let isReplayed = false;
+      let isOpened = false;
+      let dbClicked = false;
+      function viewImage(e) {
+        if (!isOpened) {
+          isOpened = true;
+          e.target.classList.replace("fa-solid", "fa-regular");
+          e.target.nextElementSibling.innerText = "Double tap to Replay";
+          img.classList.add("show");
+          setTimeout(() => {
+            img.classList.remove("show");
+          }, 1000);
+        } else {
+          if (!dbClicked) {
+            e.target.classList.replace("fa-regular", "fa-solid");
+            e.target.nextElementSibling.innerText = "Replay";
+            dbClicked = true;
+          } else if (!isReplayed) {
+            img.classList.add("show");
+            setTimeout(() => {
+              e.target.classList.replace("fa-solid", "fa-regular");
+              img.classList.remove("show");
+              e.target.nextElementSibling.innerText = "Opened";
+              isReplayed = true;
+            }, 1000);
+          }
+        }
+      }
+      function replay(e) {
+        viewImage(e);
+      }
+    </script>
+  </body>
+</html>

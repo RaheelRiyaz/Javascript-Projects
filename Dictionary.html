@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merriam Webster Dictionary</title>
+    <link
+      type="image/png"
+      sizes="16x16"
+      rel="icon"
+      href="./Images/icons8-dictionary-16.png"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+      }
+      i {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card mt-5" style="width: 33rem">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+          Merriam Webster Dictionary
+        </h6>
+        <form class="form-floating" onsubmit="updateDictionary(event)">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInputValue"
+            placeholder="Search Word here"
+          />
+          <label for="floatingInputValue">Search Word here</label>
+        </form>
+        <div class="main mt-3"></div>
+      </div>
+    </div>
+    <script>
+      const url = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+      const getMeaning = async (word) => {
+        return (await fetch(url + word)).json();
+      };
+      let fav =
+        localStorage.getItem("fav-words") !== null
+          ? JSON.parse(localStorage.getItem("fav-words"))
+          : [];
+      let currentResponse;
+      function updateDictionary(e) {
+        e.preventDefault();
+        document.querySelector(
+          ".main"
+        ).innerHTML = `<div class="d-flex justify-content-center align-items-center">
+          <i class="fa-regular fa-circle fa-flip fa-2x d-block mt-2 "></i>
+        </div>`;
+        if (e.target.firstElementChild.value) {
+          getMeaning(e.target.firstElementChild.value).then((response) => {
+            document.querySelector(".main").innerHTML = ``;
+
+            currentResponse = response[0];
+            function updatemeanings() {
+              let html = `<h6 class="card-subtitle mb-2 text-body-secondary">${response[0].word}</h6>`;
+              response[0].meanings[0].definitions.map((def) => {
+                html += `<li>${def.definition}</li>`;
+              });
+              return html;
+            }
+            if (!response.title) {
+              document.querySelector(".main").innerHTML += `
+          <h5>Defintions</h5>
+        <div class="d-flex justify-content-end align-items-center">
+          <i class="${checkFavList()}" onclick="addRemoveFromLocalStorage(event)"></i>
+          <i class="fa-solid ms-4 fa-volume-high" onclick="playAudio(event)"></i>
+          </div>
+          <ol>
+            ${updatemeanings()}
+          </ol>`;
+            } else {
+              document.querySelector(".main").innerHTML = "No defintion found";
+            }
+          });
+        } else alert("Please write any word in the input field");
+      }
+      function addRemoveFromLocalStorage(e) {
+        if (e.target.classList.contains("fa-regular")) {
+          e.target.classList.replace("fa-regular", "fa-solid");
+          e.target.classList.add("fa-bounce");
+        } else {
+          e.target.classList.replace("fa-solid", "fa-regular");
+          e.target.classList.add("fa-bounce");
+        }
+        setTimeout(() => {
+          e.target.classList.remove("fa-bounce");
+        }, 1000);
+        let isExists = fav.some((x) => {
+          return x.word === currentResponse.word;
+        });
+        if (!isExists) fav.push(currentResponse);
+        else {
+          let i = fav.findIndex((x) => {
+            return x.word === currentResponse.word;
+          });
+          fav.splice(i, 1);
+        }
+        localStorage.setItem("fav-words", JSON.stringify(fav));
+      }
+      function checkFavList() {
+        let isExists = fav.some((x) => {
+          return x.word === currentResponse.word;
+        });
+        if (!isExists) {
+          return "fa-regular fa-heart";
+        }
+        return "fa-solid fa-heart";
+      }
+      function playAudio(e) {
+        e.target.classList.add("fa-shake");
+        let audio = new Audio();
+        audio.src = currentResponse.phonetics.find((x) => x.audio !== "").audio;
+        audio.play();
+        setTimeout(() => {
+          e.target.classList.remove("fa-shake");
+        }, 1000);
+      }
+      class EmployeeRequest {
+        constructor(empCode, name, salary, doj) {
+          this.name = name;
+          this.empCode = empCode;
+          this.doj = doj;
+          this.salary = salary;
+        }
+      }
+      console.log(
+        new EmployeeRequest(101, "raheel", 1000, new Date().getDate())
+      );
+      class EmployeeResponse extends EmployeeRequest {
+        constructor(empCode, name, salary) {
+          super(empCode, name, salary, new Date().getDate());
+          this.annualSalary = this.salary * 12;
+          this.id = (Math.random() * 16).toString();
+        }
+      }
+      console.log(new EmployeeResponse(102, "Shahid", 20000));
+      class Abc {
+        constructor() {
+          this.name = "Raheel";
+        }
+      }
+      class Def extends Abc {
+        constructor() {
+          super();
+          this.salary = 10000;
+        }
+      }
+      console.log(new Def());
+      class StudentRequest {
+        constructor(name, address, classrollNo) {
+          this.name = name;
+          this.email = this.name ? this.name.toLowerCase() + "@gmail.com" : "";
+          this.address = address;
+          this.classrollNo = classrollNo;
+        }
+      }
+      class StudentResponse {
+        constructor(isSuccess, result) {
+          this.isSuccess = isSuccess;
+          this.result = result;
+        }
+      }
+      console.log(new StudentRequest("Burhan", "Bulbulbagh", 1000));
+      console.log(new StudentRequest("Suhal", "Barzulla", 9000));
+      let students = [
+        new StudentRequest("Suhal", "Barzulla", 9000),
+        new StudentRequest("Faizan", "Barzulla", 10090),
+        new StudentRequest("Amir", "Kupwara", 9000),
+      ];
+      console.log(new StudentResponse(true, students));
+      const nums = [1, 3, -1, -3, 5, 3, 6, 7];
+      function slidingWindowMaximum() {
+        let k = [];
+        for (let index = 0; index < nums.length - 2; index++) {
+          k.push(nums.slice(index, index + 3));
+        }
+        let result = [];
+        k.map((n) => {
+          result.push(Math.max(...n));
+        });
+        return result;
+      }
+      console.log(slidingWindowMaximum());
+    </script>
+  </body>
+</html>

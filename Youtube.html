@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main {
+      width: 70vw;
+      height: auto;
+      height: 70vh;
+      cursor: pointer;
+      border: 2px solid;
+    }
+    .full-screen {
+      height: 99vh;
+      width: 99vw;
+    }
+    video {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <body>
+    <div class="main" ondblclick="updateScreenSize(event)">
+      <video
+        src="./Videous/pexels-mikhail-nilov-6981411 (1080p).mp4"
+        controls
+      ></video>
+    </div>
+    <script>
+      function updateScreenSize(e) {
+        e.target.classList.toggle("full-screen");
+      }
+      class Student {
+        constructor(name, email, address) {
+          (this.name = name),
+            (this.email = email),
+            (this.address = address),
+            (this.id = Math.random() * 100000);
+        }
+      }
+      class StudentsService {
+        constructor() {
+          this.students = [
+            new Student("Raheel", "raheel@gmal.com", "Barzulla"),
+            new Student("Burhan", "burhan@gmal.com", "Bulbulbagh"),
+            new Student("Suhail", "suhail@gmal.com", "Kanipora"),
+          ];
+        }
+
+        getStudents() {
+          return this.students;
+        }
+        addStudent(student) {
+          this.students.push(student);
+        }
+        deleteStudent(name) {
+          const index = this.students.findIndex(
+            (std) => std.name.toLowerCase() === name.toLowerCase()
+          );
+          if (index >= 0) {
+            this.students.splice(index, 1);
+          }
+        }
+      }
+      const service = new StudentsService();
+      const students = service.getStudents();
+      console.log(students);
+      service.addStudent(new Student("Sami", "sami@gmail.com", "Brzulla"));
+      console.log(students);
+      service.deleteStudent("sami");
+      console.log(students);
+    </script>
+  </body>
+</html>

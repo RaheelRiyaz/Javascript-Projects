@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    li {
+      list-style: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    input {
+      width: 300px;
+      height: 30px;
+      border-radius: 10px;
+    }
+    input,
+    .suggestions {
+      margin: auto;
+      display: block;
+    }
+    .suggestions {
+      width: 296px;
+      height: auto;
+      margin-top: 10px;
+    }
+  </style>
+  <body>
+    <input
+      type="text"
+      oninput="showSuggestions(event)"
+      placeholder="Search Name"
+    />
+    <div class="suggestions"></div>
+    <script>
+      class Employee {
+        constructor(name, email, salary) {
+          this.name = name;
+          this.email = email;
+          this.salary = salary;
+          this.id = Math.floor(Math.random() * 200000);
+        }
+      }
+      let employees = [
+        new Employee("Shahid", "shahid@gmail.com", 20000),
+        new Employee("suhail", "suhail@gmail.com", 27000),
+        new Employee("raheel", "raheel@gmail.com", 2000),
+        new Employee("rashid", "rashid@gmail.com", 2000),
+        new Employee("salam", "salam@gmail.com", 2000),
+        new Employee("burhan", "burhan@gmail.com", 34000),
+        new Employee("babarazam", "babar@gmail.com", 84000),
+        new Employee("imam", "imam@gmail.com", 34000),
+        new Employee("basit", "basit@gmail.com", 34000),
+        new Employee("arjun", "arjun@gmail.com", 65000),
+      ];
+      const suggestions = document.querySelector(".suggestions");
+
+      function showSuggestions(e) {
+        const filteredEmployees = employees.filter((_) => {
+          return _.name.toLowerCase().startsWith(e.target.value.toLowerCase());
+        });
+        if (e.target.value) updateSuggestionsList(filteredEmployees);
+        else removeSuggestions();
+      }
+
+      function updateSuggestionsList(array) {
+        removeSuggestions();
+        if (array.length > 0) {
+          array.map((_) => {
+            suggestions.innerHTML += `<li onclick="showSelectedName(event)">${_.name}</li>`;
+          });
+        } else {
+          removeSuggestions("No Record");
+        }
+      }
+
+      function showSelectedName(e) {
+        document.querySelector("input").value = e.target.innerHTML;
+        removeSuggestions();
+      }
+      function removeSuggestions(value = "") {
+        suggestions.innerHTML = value;
+      }
+      class Student {
+        name = "raheel";
+        age = 23;
+        ngOnInit() {
+          this.show();
+        }
+        show() {
+          console.log(this);
+        }
+      }
+      let std = new Student();
+
+      String.prototype.add = function () {
+        console.log(this.toString());
+      };
+      "raheel".add();
+    </script>
+  </body>
+</html>

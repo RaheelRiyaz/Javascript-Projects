@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    overflow: auto;
+    width: 100vw;
+    background-image: url(https://static.wixstatic.com/media/11062b_b9e4eaeea1e14361a9922299ada08703~mv2.jpg/v1/fill/w_640,h_264,al_tl,q_80,usm_0.66_1.00_0.01,enc_auto/11062b_b9e4eaeea1e14361a9922299ada08703~mv2.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    width: 100%;
+    border: 2px solid white;
+}
+
+nav ul {
+    display: flex;
+    width: 60%;
+    justify-content: space-evenly;
+    align-items: center;
+    color: white;
+}
+
+nav li {
+    list-style: none;
+}
+
+#hero-section {
+    height: 55vh;
+    /* width: 100%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.name {
+    color: white;
+    font-size: 6vw;
+    font-weight: 300;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.profession {
+    color: #289061;
+    font-size: 7vw;
+    font-family: cursive;
+    font-weight: 400;
+}
+
+.self-detail {
+    text-align: center;
+    font-size: 2vw;
+    color: wheat;
+    width: 68%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#about {
+    height: auto;
+    /* width: 100%; */
+    padding: 10px;
+}
+
+.about-heading,
+.skill-heading {
+    font-family: cursive;
+    color: wheat;
+}
+
+.about-me {
+    font-family: monospace;
+    font-weight: 100;
+    color: wheat;
+    font-size: 2vw;
+}
+
+#skill-set {
+    margin-top: 20px;
+    height: auto;
+    /* width: 100%; */
+    padding: 10px;
+}
+
+.skills {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.skills span {
+    border-radius: 2px;
+    border: 1px solid #333333;
+    background-color: #232323;
+    box-shadow: 0 2px 3px #0000003d;
+    color: bisque;
+    padding: 5px;
+    font-weight: lighter;
+    margin: 5px;
+    font-family: cursive;
+}
+.resume{
+    height: 40px;
+    width: 30%;
+    border-radius: 5px;
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    background-color: #289061;
+}
+.resume a{
+    text-decoration: none;
+    color: white;
+    font-size: .9rem;
+}

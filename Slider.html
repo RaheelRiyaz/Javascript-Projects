@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Slider</title>
+  </head>
+  <style>
+    .content {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+      width: 80%;
+      margin: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      gap: 2px;
+    }
+    img {
+      border-radius: 20px;
+      width: 240px;
+      margin: 5px;
+      height: 300px;
+    }
+    .btns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+    }
+    button {
+      height: 30px;
+      border-radius: 12px;
+      outline: none;
+      width: 100px;
+      display: flex;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      border: 0;
+    }
+    button:nth-child(1) {
+      background-color: rgb(252, 124, 124);
+    }
+    button:nth-child(2) {
+      background-color: rgb(162, 252, 124);
+    }
+  </style>
+  <body>
+    <div class="content"></div>
+    <div class="btns">
+      <button onclick="handlePrevious()">Previous</button>
+      <button onclick="handleNext()">Next</button>
+    </div>
+    <script>
+      // const array = [
+      //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5PkW4fJsvhTn3s9hnv2nSU7a5jkGYsUH9Zl7YOHZKeA&s",
+      //   "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_640.jpg",
+      //   "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_640.jpg",
+      //   "https://images.pexels.com/photos/268533/pexels-photo-268533.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      // ];
+
+      // function handlePrevious() {
+      //   const lastEl = array.pop();
+      //   array.unshift(lastEl);
+      //   updateContent();
+      // }
+      // function handleNext() {
+      //   const firstEl = array.shift();
+      //   array.push(firstEl);
+      //   updateContent();
+      // }
+
+      // function updateContent() {
+      //   document.querySelector(".content").innerHTML = "";
+      //   array.map((_) => {
+      //     document.querySelector(
+      //       ".content"
+      //     ).innerHTML += `<img src=${_}></img>`;
+      //   });
+      // }
+      // updateContent();
+
+      // function formatDate(date) {
+      //   // Get the year, month, and day
+      //   var year = date.getFullYear();
+      //   var month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because January is 0
+      //   var day = String(date.getDate()).padStart(2, "0");
+
+      //   // Concatenate the year, month, and day with dashes
+      //   return year + "-" + month + "-" + day;
+      // }
+
+      // function getNextOccurrencesOfDay(dayOfWeek) {
+      //   // Get the current date
+      //   var today = new Date();
+
+      //   // Calculate the difference between today's day of the week and the desired day
+      //   var diff = dayOfWeek - today.getDay();
+      //   if (diff <= 0) {
+      //     diff += 7; // If the desired day is earlier than today, add 7 days to find the next occurrence
+      //   }
+
+      //   // Calculate the next four occurrences of the desired day
+      //   var nextOccurrences = [];
+      //   for (var i = 0; i < 4; i++) {
+      //     var nextDate = new Date(
+      //       today.getTime() + (diff + 7 * i) * 24 * 60 * 60 * 1000
+      //     );
+      //     nextOccurrences.push(formatDate(nextDate));
+      //   }
+
+      //   return nextOccurrences;
+      // }
+
+      // // Example usage: pass the desired day as a number (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+      // var desiredDay = 1; // User inputs the desired day (1 for Monday)
+      // var nextOccurrences = getNextOccurrencesOfDay(desiredDay);
+
+      const firstMiddleware = (req, res, next) => {
+        console.log("Inside first middleware");
+        console.log("Request", req);
+        console.log("Response", res);
+        next();
+      };
+
+      const secondMiddleware = (req, res, next) => {
+        console.log("Inside second middleware");
+        console.log("Request", req);
+        console.log("Response", res);
+        next();
+      };
+
+      const thirdMiddleware = (req, res, next) => {
+        console.log("Inside Third middleware");
+        console.log("Request", req);
+        console.log("Response", res);
+        next();
+      };
+
+      const fourthMiddleware = (req, res) => {
+        console.log("Inside Fourth middleware");
+        console.log("Request", req);
+        console.log("Response", res);
+        // next();
+      };
+
+      const Post = (...middlewares) => {
+        const req = {};
+        const res = {};
+        let currentMiddlewareIndex = 0;
+
+        const next = () => {
+          if (currentMiddlewareIndex < middlewares.length) {
+            const currentMiddleware = middlewares[currentMiddlewareIndex++];
+            currentMiddleware(req, res, next);
+          }
+        };
+        next();
+      };
+
+      Post(
+        firstMiddleware,
+        secondMiddleware,
+        thirdMiddleware,
+        fourthMiddleware
+      );
+    </script>
+  </body>
+</html>

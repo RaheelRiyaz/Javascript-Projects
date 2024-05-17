@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy-Notes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="shortcut icon"
+      href="./Images/icons8-making-notes-16.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Are you sure you want to logout?
+            </h1>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" onclick="logout()">
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand">Happy-Notes</a>
+        <div class="d-flex">
+          <button
+            class="btn btn-sm btn-danger"
+            data-bs-toggle="modal"
+            type="button"
+            data-bs-target="#exampleModal"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="card mx-auto mt-5" style="width: 60%">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-body-secondary">Happy Notes App</h6>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Add Your note" />
+          <span id="btn-container">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-addon1"
+              onclick="addNote()"
+            >
+              Add
+            </button>
+          </span>
+        </div>
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link text-dark active all"
+              aria-current="page"
+              onclick="getMyNotes(event)"
+              >All</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" onclick="filterNotes(event,0)"
+              >Pending</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" onclick="filterNotes(event,1)"
+              >Done</a
+            >
+          </li>
+        </ul>
+        <div class="notes mt-5"></div>
+      </div>
+    </div>
+    <script>
+      const url = "http://localhost:5222/api/Notes/";
+      const card = document.querySelector(".notes");
+      let myNotes;
+      const localObj = localStorage.getItem("note-token")
+        ? JSON.parse(localStorage.getItem("note-token"))
+        : "";
+      async function getMyNotes() {
+        document.querySelector(".active").classList.remove("active");
+        document.querySelector(".all").classList.add("active");
+        return (await fetch(url + "entityid/" + localObj.id))
+          .json()
+          .then((notes) => {
+            myNotes = notes.result;
+            updateNotesList(notes.result);
+          });
+      }
+      getMyNotes();
+
+      function updateNotesList(notes) {
+        document.querySelector(".notes").innerHTML = ``;
+        if (notes && notes.length > 0) {
+          notes.map((note, index) => {
+            card.innerHTML += `
+                              <div class="form-check d-flex justify-content-between">
+                                          <div>
+                                            <input
+                                              class="form-check-input mt-2"
+                                              type="checkbox"
+                                              id="flexCheckDefault"
+                                              ${
+                                                note.noteStatus === 1
+                                                  ? "checked"
+                                                  : "unchecked"
+                                              }
+                                              onclick="changeStatus(${index})"
+
+                                            />
+                                            <label class="form-check-label fs-5" for="flexCheckDefault">
+                                              ${note.myNote}
+                                            </label>
+                                            <div>
+                                              <h6 class="text-info">${new Date(
+                                                note.createdOn
+                                              )}</h6>
+                                            </div>
+                                          </div>
+                                          <div class="icons">
+                                            <i class="fa-regular fa-pen-to-square" onclick="changeButton(${index})"></i>
+                                            <i class="fa-solid fa-trash ms-2" style="color: #ec747a" onclick="deleteNote(${index})"></i>
+                                          </div>
+                                        </div>`;
+          });
+        } else {
+          card.innerHTML = `<h4 class="text-warning text-center">No Note added please add a note.Thank You!</h4>`;
+        }
+      }
+      const input = document.querySelector("input[type='text']");
+      function addNote() {
+        if (input.value) {
+          postNote({
+            entityId: localObj.id,
+            myNote: input.value,
+          });
+        } else {
+          alert("Please add a note");
+        }
+        input.value = "";
+      }
+      async function postNote(noteModel) {
+        return (
+          await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(noteModel),
+            headers: {
+              "Content-Type": "Application/json",
+            },
+          })
+        )
+          .json()
+          .then((res) => {
+            if (res.statusCode === 201) {
+              getMyNotes();
+            }
+          })
+          .catch((err) => {});
+      }
+
+      function setActiveTab(tab) {
+        document.querySelector(".active").classList.remove("active");
+        tab.classList.add("active");
+      }
+      async function changeStatus(i) {
+        return (
+          await fetch(url + "changeStatus", {
+            method: "POSt",
+            body: JSON.stringify({
+              id: myNotes[i].id,
+              status: myNotes[i].noteStatus === 0 ? 1 : 0,
+            }),
+            headers: {
+              "Content-Type": "Application/json",
+            },
+          })
+        )
+          .json()
+          .then((res) => {
+            if (res.statusCode === 200) {
+              getMyNotes();
+            }
+          });
+      }
+
+      async function deleteNote(i) {
+        return (
+          await fetch(url + `${myNotes[i].id}`, {
+            method: "DELETE",
+          })
+        )
+          .json()
+          .then((res) => {
+            if (res.statusCode === 200) {
+              getMyNotes();
+            }
+          });
+      }
+      async function filterNotes(e, status) {
+        setActiveTab(e.target);
+        return (
+          await fetch(url + "filterNotes", {
+            method: "POST",
+            body: JSON.stringify({
+              entityId: localObj.id,
+              status: status,
+            }),
+            headers: {
+              "Content-Type": "Application/json",
+            },
+          })
+        )
+          .json()
+          .then((res) => {
+            if (res.statusCode === 200) {
+              if (res.result.length > 0) updateNotesList(res.result);
+              else {
+                card.innerHTML = `<h4 class="text-danger text-center">No Note found</h4>`;
+              }
+            }
+          });
+      }
+      const btnContainer = document.querySelector("#btn-container");
+      async function changeButton(i) {
+        btnContainer.innerHTML = `
+                         <button
+                                class="btn btn-outline-success"
+                                type="button"
+                                id="button-addon1"
+                                onclick="updateNote(${i})"
+                              >
+                                Update
+                              </button>`;
+        return (await fetch(url + "id/" + myNotes[i].id)).json().then((res) => {
+          input.value = res.result.myNote;
+        });
+      }
+      async function updateNote(i) {
+        if (input.value) {
+          return (
+            await fetch(url, {
+              method: "PUT",
+              body: JSON.stringify({
+                id: myNotes[i].id,
+                note: input.value,
+              }),
+              headers: {
+                "Content-Type": "Application/json",
+              },
+            })
+          )
+            .json()
+            .then((res) => {
+              if (res.statusCode === 200) {
+                btnContainer.innerHTML = `
+                          <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                id="button-addon1"
+                                onclick="addNote()"
+                              >
+                                Add
+                              </button>`;
+                input.value = "";
+                getMyNotes();
+              }
+            });
+        } else {
+          alert("Please input any note");
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("note-token");
+        location.href = "MyNotesApp.html";
+      }
+
+      //
+      const nums = [4, 2, 7, 1, 5, 6, 19999, 753543325];
+      Array.prototype.Max = function () {
+        let max = 0;
+        for (let index = 0; index < this.length; index++) {
+          max = this[index] > max ? this[index] : max;
+        }
+        return max;
+      };
+      console.log(nums.Max());
+
+      Array.prototype.Min = function () {
+        let min = this.Max();
+        for (let index = 0; index < this.length; index++) {
+          min = this[index] < min ? this[index] : min;
+        }
+        return min;
+      };
+      console.log(nums.Min());
+
+      Array.prototype.Average = function () {
+        let sum = 0;
+        for (let index = 0; index < this.length; index++) {
+          sum += this[index];
+        }
+        return sum / this.length;
+      };
+
+      console.log(nums.Average());
+
+      console.log(nums.sort((a, b) => a - b));
+      let objs = [
+        {
+          name: "raheel",
+        },
+        {
+          name: "amir",
+        },
+        {
+          name: "zeenat",
+        },
+      ];
+      console.log(objs.sort((x, y) => x.name.localeCompare(y.name)));
+
+      class Employee {
+        constructor(name, id) {
+          this.name = name;
+          this.id = id;
+        }
+        showDetails() {
+          console.log("Employee " + this.name + " Id " + this.id);
+        }
+      }
+      class Hod extends Employee {
+        constructor() {
+          super("burhan", 1010);
+        }
+        showDetails() {
+          super.showDetails();
+        }
+      }
+      const emp = new Hod();
+      console.log(emp);
+      emp.showDetails();
+      String.prototype.IsPalindrome = function () {
+        let revrsedName = "";
+        for (let index = this.length - 1; index >= 0; index--) {
+          revrsedName += this[index];
+        }
+        return revrsedName.toLowerCase() === this.toString().toLowerCase();
+      };
+      let name = "Racecar";
+      let palindrome = "babad";
+      console.log(name.IsPalindrome());
+      Number.prototype.IsPrime = function () {
+        if (this === 0) return false;
+        else {
+          return this % 2 !== 0;
+        }
+      };
+      let x = new Number(17);
+      console.log(x.valueOf());
+      console.log(x.IsPrime());
+      Number.prototype.fibonacci = function () {
+        console.log(this);
+        let num1 = 0;
+        let num2 = 1;
+        let num3 = num1 + num2;
+        let series = [num1, num2];
+        for (let index = 0; index < this - 2; index++) {
+          series.push(num3);
+          num1 = num2;
+          num2 = num3;
+          num3 = num1 + num2;
+        }
+        return series;
+      };
+      let n = 20;
+      console.log(n.fibonacci());
+      function areAnagrams(str1, str2) {
+        let s1 = str1.toLowerCase().replace(" ", "");
+        let s2 = str2.toLowerCase().replace(" ", "");
+        let x = [];
+        let y = [];
+        if (s1.length === s2.length) {
+          for (let index = 0; index < s1.length; index++) {
+            let n1 = s1[index];
+            let n2 = s2[index];
+            y.push({
+              [n1]: [...s2].filter((_) => _ === s1[index]).length,
+            });
+            x.push({
+              [n2]: [...s1].filter((_) => _ === s2[index]).length,
+            });
+          }
+          x = x.sort((obj1, obj2) => {
+            let key1 = Object.keys(obj1)[0];
+            let key2 = Object.keys(obj2)[0];
+            return key1.localeCompare(key2);
+          });
+          y = y.sort((obj1, obj2) => {
+            let key1 = Object.keys(obj1)[0];
+            let key2 = Object.keys(obj2)[0];
+            return key1.localeCompare(key2);
+          });
+          const obj1 = Object.fromEntries(x.flatMap(Object.entries));
+          const obj2 = Object.fromEntries(y.flatMap(Object.entries));
+          const keys1 = Object.keys(obj1).join("");
+          const keys2 = Object.keys(obj2).join("");
+          const values1 = Object.values(obj1).join("");
+          const values2 = Object.values(obj2).join("");
+          if (keys1 === keys2 && values1 === values2) {
+            return true;
+          }
+          return false;
+        } else {
+          return false;
+        }
+      }
+      function IsAnagram(s1, s2) {
+        let string1 = s1
+          .toLowerCase()
+          .replace(" ", "")
+          .split("")
+          .sort((a, b) => a.localeCompare(b))
+          .join("");
+        let string2 = s2
+          .toLowerCase()
+          .replace(" ", "")
+          .split("")
+          .sort((a, b) => a.localeCompare(b))
+          .join("");
+        return string1 === string2;
+      }
+      console.log(IsAnagram("listen", "silent"));
+      console.log(areAnagrams("debit card", "Bad credit"));
+      // Input: "Coding is fun";
+      // Output: "fun is Coding";
+      String.prototype.reverseWord = function () {
+        let words = [];
+        let word = "";
+        let string = [...this, " "];
+        for (let index = 0; index < string.length; index++) {
+          if (string[index] !== " ") {
+            word += string[index];
+          } else {
+            words.push(word);
+            word = "";
+          }
+        }
+        for (let index = words.length - 1; index >= 0; index--) {
+          word += words[index] + " ";
+        }
+        return word;
+      };
+      let word = "i am raheel";
+      console.log(word.reverseWord());
+      let numbers = [1, 3, 4, 5, 8, 9, 10, 7];
+      function findMissingNumber(arr) {
+        let missingNumbers = [];
+        for (let index = Math.min(...arr); index <= Math.max(...arr); index++) {
+          if (index > 0 && !arr.includes(index)) {
+            missingNumbers.push(index);
+          }
+        }
+        return missingNumbers.length === 1
+          ? missingNumbers[0]
+          : missingNumbers.sort((a, b) => a - b);
+      }
+      console.log(findMissingNumber(numbers));
+      console.log("///Includes method///");
+      Array.prototype.Includes = function (x) {
+        for (let index = 0; index < this.length; index++) {
+          if (this[index] === x) return true;
+        }
+        return false;
+      };
+      console.log(numbers.Includes(7));
+      let arr1 = [1, 2, 3, 4, 5];
+      let arr2 = [5, 3, 2, 1];
+      function findCommonNumbers(arr1, arr2) {
+        let commonNumbers = [];
+        let lengths = [arr1.length, arr2.length];
+        for (let index = 0; index < Math.max(...lengths); index++) {
+          let x = arr1[index];
+          for (let index = 0; index < Math.min(...lengths); index++) {
+            if (arr2[index] === x) {
+              commonNumbers.push(arr2[index]);
+            }
+          }
+        }
+        return [...new Set(commonNumbers)];
+      }
+      console.log(findCommonNumbers(arr1, arr2));
+      let arr = [11, 2, 5, 7, 15];
+      function findIndexesOfTheNumbers(arr, target) {
+        console.log(arr);
+        for (let index = 0; index < arr.length; index++) {
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[index] !== arr[i] && arr[index] + arr[i] === target) {
+              return [index, i];
+            }
+          }
+        }
+        return NaN;
+      }
+      console.log(findIndexesOfTheNumbers(arr, 9));
+
+      function firstNonRepeatingCharacter(str) {
+        for (let index = 0; index < str.length; index++) {
+          let filtered = [...str].filter((_) => _ === str[index]);
+          if (filtered.length === 1) {
+            return str[index];
+          }
+        }
+        return null;
+      }
+      console.log(firstNonRepeatingCharacter("loveleetcode"));
+
+      // function validParentheses(str) {
+      //   let isTrue = false;
+      //   for (let index = 0; index < str.length; index++) {
+      //     let filtered = str.filter((_) => _ === str[index]);
+      //   }
+      // }
+      // console.log(validParentheses("()"));
+
+      function fizzBuzz(n) {
+        let array = [];
+        for (let index = 1; index <= n; index++) {
+          if (index % 3 === 0 && index % 5 === 0) {
+            array.push("FizzBuzz");
+          } else if (index % 5 === 0) {
+            array.push("Buzz");
+          } else if (index % 3 === 0) {
+            array.push("Fizz");
+          } else {
+            array.push(index.toString());
+          }
+        }
+        return array;
+      }
+      console.log(fizzBuzz(16));
+      let words = ["apple", "app", "ap"];
+      function longestCommonPrefix(arr) {
+        let w = "";
+        let match = "";
+        for (let i = 0; i < arr[0].length; i++) {
+          w += arr[0][i];
+          if (words.every((_) => _.startsWith(w))) {
+            match += arr[0][i];
+          } else {
+            return match;
+          }
+        }
+        return match;
+      }
+      console.log(longestCommonPrefix(words));
+      const peaks = [1, 2, 3, 1];
+      function findPeakElement(arr) {
+        for (let index = 0; index < arr.length; index++) {
+          if (index > 0 && index < arr.length - 1) {
+            if (arr[index] >= arr[index - 1] && arr[index + 1]) {
+              return arr[index];
+            }
+          }
+        }
+        return NaN;
+      }
+      console.log(findPeakElement(peaks));
+
+      // function maxProduct(arr) {
+      //   let product = 0;
+      //   for (let index = 0; index < arr.length; index++) {
+      //     for (let i = 0; i < arr.length; i++) {
+      //       if (arr[index] !== arr[i]) {
+      //         let p = arr[index] * arr[i];
+      //         if (p > product) product = p;
+      //       }
+      //     }
+      //   }
+      //   return product;
+      // }
+      function maxProduct(arr) {
+        let product = 0;
+
+        for (let index = 0; index < arr.length; index++) {
+          for (let i = index + 1; i < arr.length; i++) {
+            let p = arr[index] * arr[i];
+            if (p > product) product = p;
+          }
+        }
+
+        return product;
+      }
+
+      console.log(maxProduct([1, 2, 3, 4, 5, 9, 2]));
+
+      function firstNonRepeatingCharacter(str) {
+        for (let index = 0; index < str.length; index++) {
+          if ([...str].filter((_) => _ === str[index]).length === 1) {
+            return str[index];
+          }
+        }
+        return null;
+      }
+      console.log(firstNonRepeatingCharacter("harhrat"));
+
+      function removeDuplicates(arr) {
+        let set = [];
+        for (let index = 0; index < arr.length; index++) {
+          if (!set.includes(arr[index])) {
+            set.push(arr[index]);
+          }
+        }
+        return set;
+      }
+      console.log(removeDuplicates([1, 2, 3, 2, 1, 4, 5, 4]));
+      function majorityElement(array) {
+        let set = removeDuplicates(array);
+        let majority = 0;
+        let el = 0;
+        for (let index = 0; index < set.length; index++) {
+          let filtered = array.filter((_) => _ === set[index]);
+          if (filtered.length > majority) {
+            majority = filtered.length;
+            el = set[index];
+          }
+        }
+        return el;
+      }
+      console.log(majorityElement([2, 2, 1, 1, 1, 1, 1, 2, 2]));
+      let obj = {
+        name: "raheel",
+      };
+      console.log(obj);
+      obj.name = "suhail";
+      console.log(obj);
+      let array = [1, 2, 3, 4];
+      let y = array;
+      y.push(5);
+      console.log(array);
+      function generateRandomColor() {
+        let r = Math.floor(Math.random() * 260);
+        let g = Math.floor(Math.random() * 260);
+        let b = Math.floor(Math.random() * 260);
+        document.body.style.background = `rgba(${r},${g},${b})`;
+      }
+      generateRandomColor();
+
+      function sumOfMultiples(array) {
+        let x = [];
+        for (let index = 0; index < array.length; index++) {
+          for (let i = 1; i < 10; i++) {
+            if (i % array[index] === 0) {
+              x.push(i);
+            }
+          }
+        }
+        let sum = 0;
+        for (let index = 0; index < x.length; index++) {
+          sum += x[index];
+        }
+        return sum;
+      }
+      console.log(sumOfMultiples([3, 5]));
+
+      function palindromePairs(array) {
+        let result = [];
+        for (let index = 0; index < array.length; index++) {
+          console.log(array[index]);
+          console.log(array[index + 1]);
+          if (
+            array[index].toLowerCase() ===
+            Array.from(array[index + 1])
+              .reverse()
+              .join("")
+          ) {
+            result.push(`(${index}, ${index + 1})`);
+          }
+          index = index + 1;
+        }
+        console.log(result);
+      }
+      palindromePairs(["code", "edoc", "da", "ad"]);
+
+      function longestIncreasingSubsequence(array) {
+        let ln = 0;
+        for (let index = 0; index < array.length; index++) {
+          ln = array[index] > ln ? array[index] : ln;
+        }
+        let sn = ln;
+        for (let index = 0; index < array.length; index++) {
+          sn = array[index] < sn ? array[index] : sn;
+        }
+        array = array.slice(array.findLastIndex((_) => _ === sn));
+        console.log(array);
+        let result = [array[0]];
+        for (let index = 0; index < array.length; index++) {
+          if (!array[index] < array[index + 1]) {
+          }
+        }
+        console.log(result);
+      }
+      console.log(longestIncreasingSubsequence([3, 1, 4, 1, 5, 9, 2, 6]));
+
+      function factorial(n) {
+        let fac = n;
+        for (let index = n - 1; index > 0; index--) {
+          fac *= index;
+        }
+        return fac;
+      }
+      factorial(5);
+
+      function binarySearch(array, target) {
+        for (let index = 0; index < array.length; index++) {
+          if (array[index] === target) return index;
+        }
+      }
+      console.log(binarySearch([9, 12, 4, 5, 8, 64, 56], 9));
+
+      function findSecondLargest(array) {
+        let set = [...new Set([...array.sort((x, y) => x - y)])];
+        return set[set.length - 2];
+      }
+      console.log(findSecondLargest([5, 2, 10, 7, 8])); // Output: 8
+      console.log("////////////Duplicates////////////");
+      let b = [1, 2, 3, 1, 2, 4, 5, 6, 5];
+      let arra = [];
+      let isDuplicate = false;
+      for (let index = 0; index < b.length; index++) {
+        console.log(b[index]);
+        for (let i = 0; i < arra.length; i++) {
+          if (b[index] === arra[i]) {
+            isDuplicate = true;
+            break;
+          }
+          if (!isDuplicate) {
+            arra.push(array[index]);
+          }
+        }
+      }
+      console.log(arra);
+      function longestCommonPrefix(array) {
+        let commonValues = "";
+        for (let index = 0; index < array[0].length; index++) {
+          let isCommon = false;
+          const el = array[0][index];
+          for (let i = 0; i < array.length; i++) {
+            const element = array[i];
+            if (element[i] === el) {
+              isCommon = true;
+            }
+          }
+          if (isCommon) {
+            commonValues += el;
+          }
+        }
+        return commonValues;
+      }
+
+      console.log(longestCommonPrefix(["flower", "flow", "flight"])); // Output: "fl"
+      function twoSum(array, target) {
+        for (let index = 0; index < array.length; index++) {
+          for (let i = index + 1; i < array.length; i++) {
+            if (array[index] + array[i] === target) {
+              return [index, i];
+            }
+          }
+        }
+      }
+      console.log(twoSum([2, 7, 11, 15], 9));
+
+      function isPalindrome(string) {
+        let reversedString = "";
+        let givenString = "";
+        for (let index = 0; index < string.length; index++) {
+          if (string[index] !== "," && string[index] !== " ")
+            givenString += string[index];
+        }
+        for (let index = string.length - 1; index >= 0; index--) {
+          if (string[index] !== " " && string[index] !== ",")
+            reversedString += string[index];
+        }
+        return givenString.toLowerCase() === reversedString.toLowerCase();
+      }
+      console.log(isPalindrome("Able , was I saw eLba"));
+
+      function findMax(array) {
+        let max = array[0];
+        for (let index = 0; index < array.length; index++) {
+          if (array[index] > max) max = array[index];
+        }
+        return max;
+      }
+
+      console.log(findMax([-2, -5, -1, -10, -7])); // Output: 10
+
+      function countOccurrences(array, target) {
+        let count = 0;
+        for (let index = 0; index < array.length; index++) {
+          if (array[index] === target) count++;
+        }
+        return count;
+      }
+      console.log(countOccurrences([1, 2, 3, 4, 1, 2, 1], 1));
+
+      function findSmallestElement(array) {
+        let minVal = array[0];
+        for (let index = 0; index < array.length; index++) {
+          if (array[index] < minVal) minVal = array[index];
+        }
+        return minVal;
+      }
+      console.log(findSmallestElement([3, 7, 1, 10, 5])); // Output: 1
+
+      function reverseWords(string) {
+        string += " ";
+        let word = "";
+        let words = [];
+        for (let index = 0; index < string.length; index++) {
+          word += string[index];
+          if (string[index] === " ") {
+            words.push(word);
+            word = "";
+          }
+        }
+        for (let index = words.length - 1; index >= 0; index--) {
+          word += words[index];
+        }
+        return word.trim();
+      }
+      console.log(reverseWords("Coding is fun")); // Output: "World Hello"
+
+      function longestConsecutiveSequence(array) {
+        const sortedArray = array.sort((x, y) => x - y);
+        let newArray = [];
+        console.log(sortedArray);
+
+        for (let index = sortedArray.length - 1; index >= 0; index--) {
+          if (index > 0) {
+            console.log(sortedArray[index]);
+            console.log(sortedArray[index - 1]);
+            if (sortedArray[index] - sortedArray[index - 1] === 1) {
+              newArray.push(sortedArray[index]);
+            }
+          }
+        }
+        console.log(newArray);
+      }
+      longestConsecutiveSequence([100, 4, 200, 1, 3, 2]);
+      function twoSum(array, target) {
+        for (let index = 0; index < array.length; index++) {
+          for (let i = index + 1; i < array.length; i++) {
+            if (array[index] + array[i] === target) {
+              return [array[index], array[i]];
+            }
+          }
+        }
+      }
+      console.log(twoSum([3, 2, 4], 6));
+
+      function countVowels(string) {
+        let vowels = ["a", "e", "i", "o", "u"];
+        let count = 0;
+        for (let index = 0; index < string.length; index++) {
+          if (vowels.includes(string[index])) {
+            count++;
+          }
+        }
+        return count;
+      }
+      console.log(countVowels("programming"));
+
+      function findfactorial(num) {
+        if (num === 0) return 1;
+        let total = num;
+        for (let index = num - 1; index > 0; index--) {
+          total *= index;
+        }
+        return total;
+      }
+      console.log(findfactorial(5));
+      // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+      function generateFibonacciSequence(num) {
+        let num1 = 0;
+        let num2 = 1;
+        let sum;
+        let series = [num1, num2];
+        // for (let index = 0; index < num - 2; index++) {
+        //   sum = num1 + num2;
+        //   series.push(sum);
+        //   num1 = num2;
+        //   num2 = sum;
+        // }
+        for (let index = 0; index < num - 2; index++) {
+          series.push(series[series.length - 1] + series[series.length - 2]);
+        }
+        return series;
+      }
+      console.log(generateFibonacciSequence(10));
+
+      function areAnagrams(x, y) {
+        x = x.replace(" ", "");
+        y = y.replace(" ", "");
+        if (x.length === y.length) {
+          return (
+            [...x].sort((a, b) => a.localeCompare(b)).join("") ===
+            [...y].sort((a, b) => a.localeCompare(b)).join("")
+          );
+        }
+        return false;
+      }
+      console.log(areAnagrams("astronomer", "moon starer")); // Output: true
+      function generateTable(table, length) {
+        let generatedTable = [];
+        for (let index = 1; index <= length; index++) {
+          document.body.innerHTML += `
+          ${table} X ${index} = ${table * index} <br>`;
+        }
+      }
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+      .toggler-div {
+        width: 100px;
+        height: 40px;
+        border-radius: 20px;
+        border: 2px solid black;
+      }
+      .toggle-btn {
+        height: 100%;
+        width: 35px;
+        background-color: black;
+        border-radius: 50%;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+      }
+      .toggle {
+        transform: translateX(61px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toggler-div">
+      <div class="toggle-btn" onclick="toggle(event)"></div>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex cum numquam
+        alias dolores. Ullam doloribus, ipsum harum magnam sit est ex iste
+        adipisci ducimus hic tenetur inventore fuga rem excepturi aliquid magni
+        molestiae delectus maxime sunt fugiat. Dolorem fugiat ad, recusandae
+        accusamus rerum at voluptates nam dicta doloribus exercitationem
+        aliquam. Vel exercitationem maxime explicabo nobis aliquam corrupti
+        inventore cumque iusto nam dolores ratione, voluptates maiores eum iste
+        eaque quibusdam aspernatur quam. Itaque, sed. Nobis atque deserunt odit
+        voluptatem placeat ad ullam deleniti. Fuga repudiandae dolorem autem est
+        illo unde. Voluptates officia officiis voluptas? Eos, fuga id quasi
+        aspernatur rerum quas?
+      </p>
+    </div>
+    <script>
+      function toggle(e) {
+        if (e.target.classList.contains("toggle")) {
+          e.target.classList.remove("toggle");
+          document.body.style.background = "white";
+          document.querySelector(".toggler-div").style.border =
+            "2px solid black";
+          document.querySelector(".toggle-btn").style.background = "black";
+          document.querySelector("p").style.color = "black";
+        } else {
+          document.body.style.background = "black";
+          e.target.classList.add("toggle");
+          document.querySelector(".toggler-div").style.border =
+            "2px solid white";
+          document.querySelector(".toggle-btn").style.background = "green";
+          document.querySelector("p").style.color = "white";
+        }
+      }
+    </script>
+  </body>
+</html>

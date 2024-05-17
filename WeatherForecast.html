@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const options = {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key": "b4e96323fmshf5e4b8a90ple091djsnfb21cde4eb87",
+          "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com",
+        },
+      };
+      const URL =
+        "https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=Delhi";
+      const getWeatherByCity = async (city) => {
+        return (await fetch(URL, options))
+          .json()
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      };
+      getWeatherByCity("delhi");
+      class Employee {
+        constructor(name, address, contactNumber) {
+          this.name = name;
+          this.address = address;
+          this.contactNumber = contactNumber;
+        }
+        showDetails() {
+          console.log(this);
+        }
+      }
+      const emp = new Employee("raheel", "barzulla", 8899726343);
+      emp.showDetails();
+    </script>
+  </body>
+</html>

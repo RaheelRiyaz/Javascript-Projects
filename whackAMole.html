@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card {
+        background-color: #ffecce;
+      }
+      h1 {
+        font-family: cursive;
+      }
+      .line {
+        height: 25px;
+        width: 200px;
+        background-color: black;
+        display: block;
+        border-radius: 15px;
+      }
+      .moles {
+        margin: 100px 5px;
+        position: relative;
+      }
+      img {
+        object-fit: cover;
+        width: 100px;
+        height: 169px;
+        z-index: 999;
+        position: absolute;
+        display: none;
+        transition: all 0.3s ease-in-out;
+        top: 34px;
+        cursor: pointer;
+      }
+      .show {
+        top: -170px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" style="width: 40rem">
+      <h1 class="text-center">Whack A Mole ! <span class="score">0</span></h1>
+      <div class="m-auto">
+        <button class="btn btn-success" onclick="startGame()">Start</button>
+      </div>
+      <div class="card-body mt-5 d-flex justify-content-between flex-wrap">
+        <div class="moles">
+          <span class="line"></span>
+          <img
+            src="Images/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.avif"
+            alt=""
+          />
+        </div>
+        <div class="moles">
+          <span class="line"></span>
+          <img
+            src="Images/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.avif"
+            alt=""
+          />
+        </div>
+        <div class="moles">
+          <span class="line"></span>
+          <img
+            src="Images/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.avif"
+            alt=""
+          />
+        </div>
+        <div class="moles">
+          <span class="line"></span>
+          <img
+            src="Images/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.avif"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+    <script>
+      const images = document.querySelectorAll("img");
+      let index = 0;
+      images.forEach((img) => {
+        img.addEventListener("click", function () {
+          index++;
+          document.querySelector(".score").innerHTML = index;
+        });
+      });
+      function startGame() {
+        let index;
+        setInterval(() => {
+          const showedImage = document.querySelector(".show");
+          if (showedImage) showedImage.classList.remove("show");
+          let randomIndex = Math.floor(Math.random() * images.length);
+          if (randomIndex !== index) {
+            images[randomIndex].classList.add("show");
+          } else {
+            randomIndex = Math.floor(Math.random() * images.length)
+          }
+          index = randomIndex;
+        }, 900);
+      }
+    </script>
+  </body>
+</html>

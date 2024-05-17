@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+    .parent {
+      height: 410px;
+      width: 360px;
+      border: 2px solid;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .child {
+      height: 90px;
+      margin: 2px;
+      width: 110px;
+      border: 2px solid red;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="moves">
+      <h1>Moves : <span class="move">0</span></h1>
+    </div>
+    <div class="parent"></div>
+    <script>
+      let moves = 0;
+      const parent = document.querySelector(".parent");
+      const move = document.querySelector(".move");
+      let array = [1, 2, 3, 4, 5, 6];
+      array = [...array, ...array];
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const randomIndex = Math.floor(Math.random() * (i + 1));
+          [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+        }
+      }
+      shuffleArray(array);
+
+      function updateUI() {
+        array.map((_, i) => {
+          parent.innerHTML += `<button class="child">
+            <span class="hidden">${_}</span>
+            </button>`;
+        });
+      }
+      updateUI();
+      let indexes = [];
+      let clicked = 0;
+      const childs = document.querySelectorAll(".child");
+      childs.forEach((child, i) => {
+        child.addEventListener("click", (e) => {
+          e.target.disabled = true;
+          childs[i].firstElementChild.classList.remove("hidden");
+          clicked++;
+          moves++;
+          move.innerHTML = moves;
+          indexes.push(i);
+          if (clicked === 2) {
+            clicked = 0;
+            let [first, second] = indexes;
+            if (childs[first].innerHTML !== childs[second].innerHTML) {
+              setTimeout(() => {
+                childs[first].firstElementChild.classList.add("hidden");
+                childs[second].firstElementChild.classList.add("hidden");
+                childs[first].disabled = false;
+                childs[second].disabled = false;
+              }, 900);
+            }
+            indexes = [];
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

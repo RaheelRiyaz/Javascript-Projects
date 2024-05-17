@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function getSpecificDays(dayOfWeek) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const specificDays = [];
+
+        // Find the first occurrence of the specified day
+        let firstOccurrence = new Date(year, now.getMonth(), now.getDate());
+        while (firstOccurrence.getDay() !== dayOfWeek) {
+          firstOccurrence.setDate(firstOccurrence.getDate() + 1);
+        }
+
+        // Push all occurrences of the specified day
+        while (firstOccurrence.getFullYear() === year) {
+          specificDays.push(new Date(firstOccurrence));
+          firstOccurrence.setDate(firstOccurrence.getDate() + 7);
+        }
+
+        return specificDays;
+      }
+      const fridaysThisYear = getSpecificDays(5); // Get all Fridays
+
+      console.log(fridaysThisYear);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.tracker {
+    display: flex;
+    width: 70%;
+    margin: auto;
+    justify-content: space-evenly;
+}
+.active{
+    background-color: blue;
+    color: black;
+}
+.track {
+    height: 50px;
+    width: 50px;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid;
+    border: 0;
+    border-radius: 50%;
+}

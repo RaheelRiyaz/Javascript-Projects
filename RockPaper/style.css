@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.icon {
+    transition: all .2s ease-in-out;
+}
+
+.fa-purple {
+    color: #5151c4;
+}
+
+.fa-light {
+    color: #d2dbe3;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.active {
+    color: #8383ef;
+}
+
+
+.card-body {
+    width: 76%;
+    margin: auto;
+}
+
+.left-hand {
+    transform: rotate(90deg);
+}
+
+.right-hand {
+    transform: rotate(-90deg);
+}
+
+.wavy-left {
+    animation: wave-left .5s ease-in-out infinite;
+}
+
+.wavy-right {
+    animation: wave-right .5s ease-in-out infinite;
+}
+
+.icon:hover {
+    color: #8383ef;
+}
+
+@keyframes wave-left {
+    0% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(120deg);
+    }
+}
+
+@keyframes wave-right {
+    0% {
+        transform: rotate(-90deg);
+    }
+
+    100% {
+        transform: rotate(-120deg);
+    }
+}
+
+
+@media only screen and (max-width: 400px) {
+    .top-section i {
+        font-size: 5rem;
+    }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      li {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        list-style: decimal;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" style="width: 22rem">
+      <div class="card-body">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Add a Todo"
+            aria-label="Recipient's username"
+            aria-describedby="button-addon2"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="button-addon2"
+          >
+            Add
+          </button>
+        </div>
+        <ul></ul>
+      </div>
+    </div>
+    <script>
+      const inputBox = document.querySelector("input");
+      const uls = document.querySelector("ul");
+      const btn = document.querySelector("button");
+      let audEl = new Audio();
+      let isEdit = false;
+      let itemNumber = 0;
+      const todos =
+        localStorage.getItem("todos") !== null
+          ? JSON.parse(localStorage.getItem("todos"))
+          : [];
+      btn.addEventListener("click", () => {
+        if (inputBox.value) {
+          if (!isEdit) {
+            todos.push(inputBox.value);
+          } else {
+            todos[itemNumber] = inputBox.value;
+            isEdit = false;
+            btn.innerHTML = "Add";
+          }
+          updateAudio("./Audious/scale-e6-14577.mp3");
+          updateLocalStorage();
+        }
+      });
+
+      function updateTodos() {
+        uls.innerHTML = "";
+        inputBox.value = "";
+        todos.map((todo, index) => {
+          uls.innerHTML += `
+            <li>
+            ${todo}
+            <div>
+              <i class="fa-solid fa-pen" onclick="editTodoItem(${index})"></i
+              ><i class="fa-solid ms-2 fa-trash" onclick="removeTodoItem(${index})"></i>
+            </div>
+          </li>`;
+        });
+      }
+      updateTodos();
+
+      function updateAudio(audio) {
+        audEl.src = audio;
+        audEl.play();
+      }
+      function editTodoItem(index) {
+        inputBox.value = todos[index];
+        itemNumber = index;
+        isEdit = true;
+        btn.innerHTML = "Update";
+      }
+      function removeTodoItem(index) {
+        todos.splice(index, 1);
+        updateAudio("./Audious/mag-remove-92075.mp3");
+        updateLocalStorage();
+      }
+
+      function updateLocalStorage() {
+        localStorage.setItem("todos", JSON.stringify(todos));
+        updateTodos();
+      }
+    </script>
+  </body>
+</html>

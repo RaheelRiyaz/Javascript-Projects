@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculation Game</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      button {
+        width: 300px;
+        margin-bottom: 10px;
+      }
+      li a {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="nav nav-tabs mt-2 ms-2 me-2">
+      <li class="nav-item">
+        <a class="nav-link links active" aria-current="page" id="+">Addition</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link links" id="-">Subtraction</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link links" id="*">Multiplication</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link links" id="/">Division</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="random">Random</a>
+      </li>
+    </ul>
+
+    <div class="card mx-auto mt-5" style="width: 48rem"></div>
+    <script>
+      let result = 0;
+      let operant = "+";
+      let interval;
+      function generateQuestion(operator) {
+        let numbers = [];
+        let options = [];
+        for (let index = 0; index < 2; index++) {
+          const randomNumber = Math.floor(Math.random() * 100);
+          numbers.push(randomNumber);
+        }
+        result = numbers.reduce((x, y) => {
+          switch (operator) {
+            case "+":
+              return x + y;
+              break;
+            case "-":
+              return x - y;
+            case "*":
+              return x * y;
+            case "/":
+              return x / y;
+            default:
+              return x + y;
+          }
+        });
+        options.push(result);
+        for (let index = 0; index < 3; index++) {
+          options.push(Math.floor(Math.random() * 120));
+        }
+
+        options = options
+          .map((value) => ({ value, sort: Math.random() }))
+          .sort((a, b) => a.sort - b.sort)
+          .map(({ value }) => value);
+        document.querySelector(".card").innerHTML = ``;
+        document.querySelector(".card").innerHTML = `
+        <div class="card-body">
+        <h6 class="card-title mb-4">${
+          operator === "+"
+            ? "Addition"
+            : operator === "-"
+            ? "Subtraction"
+            : operator === "*"
+            ? "Multiplication"
+            : "Division"
+        } Question</h6>
+        <h3 class="card-subtitle mb-2 text-body-secondary">
+          What is the ${
+            operator === "+"
+              ? "Addition"
+              : operator === "-"
+              ? "Subtraction"
+              : operator === "*"
+              ? "Multiplication"
+              : "Division"
+          } of ${numbers[0]} and ${numbers[1]}?
+        </h3>
+        <div class="options d-flex flex-column align-items-center mt-5">
+          <button class="btn btn-primary" onclick="checkAnswer(event)">${
+            options[0]
+          }</button>
+          <button class="btn btn-primary" onclick="checkAnswer(event)">${
+            options[1]
+          }</button>
+          <button class="btn btn-primary" onclick="checkAnswer(event)">${
+            options[2]
+          }</button>
+          <button class="btn btn-primary" onclick="checkAnswer(event)">${
+            options[3]
+          }</button>
+        </div>
+      </div>`;
+      }
+      generateQuestion(operant);
+      function checkAnswer(e) {
+        if (e.target.innerText == result) {
+          generateQuestion(operant);
+        } else {
+          alert("Wrong answer");
+        }
+      }
+      document.querySelectorAll(".links").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          clearInterval(interval);
+          updateActiveClass(e.target);
+          operant = e.target.id;
+          generateQuestion(operant);
+        });
+      });
+      function updateActiveClass(target) {
+        document.querySelector(".active").classList.remove("active");
+        target.classList.add("active");
+      }
+
+      document.querySelector("#random").addEventListener("click", (e) => {
+        updateActiveClass(e.target);
+        let operants = ["+", "-", "*", "%"];
+        interval = setInterval(() => {
+          operant = operants[Math.floor(Math.random() * operants.length)];
+          console.log(operant);
+        }, 1000);
+        generateQuestion(operant);
+      });
+      class Employee {
+        constructor(address, dob) {
+          (this.address = address), (this.dob = dob);
+        }
+      }
+      class Base extends Employee {
+        constructor(name, email) {
+          super();
+          this.name = name;
+          this.email = email;
+          this.id = new Date().getTime();
+        }
+      }
+
+      class Student extends Base {
+        constructor(name, email, standard, age, rollNo) {
+          super(name, email);
+          this.standard = standard;
+          this.age = age;
+          this.rollNo = rollNo;
+        }
+      }
+      const std = new Student("raheel", "raheel@gmail.com", "12th", 20, 1000);
+      console.log(std);
+      async function getWeather(city) {
+        return (
+          await fetch(
+            `  https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3265874a2c77ae4a04bb96236a642d2f`
+          )
+        ).json();
+      }
+      getWeather("delhi").then((response) => {
+        console.log(response);
+      });
+      const names = ["sahil", "raheel", "burhan", "amir", "sahil"];
+      Array.prototype.FindIndex = function (fun) {
+        let i = -1;
+        for (let index = 0; index < this.length; index++) {
+          if (fun(this[index])) {
+            i = index;
+            break;
+          }
+        }
+        return i;
+      };
+      const i1 = names.FindIndex((n) => {
+        return n === "amir";
+      });
+      console.log(i1);
+      Array.prototype.LastIndex = function (fun) {
+        let i = -1;
+        for (let index = 0; index < this.length; index++) {
+          if (fun(this[index])) {
+            i = index;
+          }
+        }
+        return i;
+      };
+
+      const i2 = names.LastIndex((n) => {
+        return n === "sahil";
+      });
+      console.log(i2);
+      Object.prototype.Equls = function (obj) {
+        const keys1 = Object.keys(this);
+        const keys2 = Object.keys(obj);
+        if (typeof obj === "object") {
+          if (keys1.length === keys2.length) {
+            const values1 = Object.values(this);
+            const values2 = Object.values(obj);
+            let res = false;
+            for (let index = 0; index < values1.length; index++) {
+              if (values1[index] === values2[index]) {
+                res = true;
+              } else {
+                res = false;
+              }
+            }
+            return res;
+          }
+          return false;
+        } else {
+          throw new Error("only object type accepted");
+        }
+      };
+      const x = {
+        name: "raheel",
+        id: 1,
+      };
+      const y = {
+        name: "raheel",
+        id: 1,
+      };
+      console.log(x.Equls(y));
+      Array.prototype.Select = function (callBack) {
+        let returnedArray = [];
+        for (let index = 0; index < this.length; index++) {
+          returnedArray.push(callBack(this[index]));
+        }
+        return returnedArray;
+      };
+      let objects = [
+        {
+          name: "raheel",
+          id: 100,
+        },
+        {
+          name: "suhail",
+          id: 100,
+        },
+        {
+          name: "burhan",
+          id: 100,
+        },
+      ];
+      let returnedNames = objects.Select((obj) => {
+        return {
+          name: obj.name,
+          id: obj.id,
+          salary: 10000,
+        };
+      });
+      console.log(returnedNames);
+    </script>
+  </body>
+</html>

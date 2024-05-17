@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      img:first-child {
+        object-fit: cover;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+      }
+      .songs-container {
+        height: 35rem;
+        cursor: pointer;
+        overflow: auto;
+      }
+      .songs-container::-webkit-scrollbar {
+        display: none;
+      }
+      img:not(img:first-child) {
+        width: 70px;
+        height: 40px;
+      }
+      .hide {
+        display: none;
+      }
+      .show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card mt-5 mx-auto bg-dark" style="width: 80%">
+      <div class="card-body bg-dark">
+        <h5 class="card-title">Saawan</h5>
+        <div class="songs-container bg-dark"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <input
+        type="range"
+        class="form-range"
+        value="0"
+        max="100"
+        oninput="stepMusic(event)"
+        id="customRange2"
+      />
+      <div class="buttons mx-auto" style="width: 200px">
+        <i class="fa-solid fa-2x ms-4 fa-caret-left" onclick="playPreviousSong(event)"></i>
+        <i class="fa-solid fa-2x ms-4 fa-play playBtn" onclick="playMusic(event)"></i>
+        <i
+          class="fa-solid fa-2x ms-4 fa-caret-right"
+          onclick="playNextSong(event)"
+        ></i>
+      </div>
+    </div>
+    <script>
+      let index = 0;
+      const songs = [
+        {
+          songUrl:
+            "./Audious/Dil Galti Kar Baitha Hai_64(PagalWorld.com.se).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Jubin Nautiyal",
+        },
+        {
+          songUrl: "./Audious/Kahani Suno_64(PagalWorld.com.se) (1).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Hamid Khan",
+        },
+        {
+          songUrl: "./Audious/Tere Hawaale_64(PagalWorld.com.se).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Arijit Singh",
+        },
+        {
+          songUrl: "./Audious/Tur Kalleyan_64(PagalWorld.com.se).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Jubin Nautiyal",
+        },
+        {
+          songUrl:
+            "./Audious/Dil Galti Kar Baitha Hai_64(PagalWorld.com.se).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Jubin Nautiyal",
+        },
+        {
+          songUrl:
+            "./Audious/Dil Galti Kar Baitha Hai_64(PagalWorld.com.se).mp3",
+          thumbnail:
+            "https://i.ytimg.com/vi/M9ce032FK0Y/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTShGMA8=&rs=AOn4CLBntM4xFFkNhl1Qxe4lL5N6bB7dFQ",
+          artist: "Jubin Nautiyal",
+        },
+      ];
+      const songsContainer = document.querySelector(".songs-container");
+      let audioEl = new Audio();
+      audioEl.src = songs[index].songUrl;
+      (function updateSongs() {
+        songs.map((song, index) => {
+          songsContainer.innerHTML += `
+            <div class="card mt-3 text-white" style="background-color: black" onclick="playSong(event,${index})">
+            <div
+              class="card-body d-flex justify-content-between"
+              style="border: 1px solid wheat"
+            >
+              <img src="${song.thumbnail}" alt="" />
+            
+              ${song.songUrl.slice(10)}
+              <img class="icon hide" src="./Images/playMusicGif.gif" alt="" />
+            </div>
+          </div> `;
+        });
+      })();
+      function playSong(e, i) {
+        index = i;
+        if (document.querySelector(".show"))
+          document.querySelector(".show").classList.remove("show");
+        e.target.firstElementChild.nextElementSibling.classList.add(
+          "hide",
+          "show"
+        );
+        audioEl.src = songs[index].songUrl;
+        audioEl.play()
+        document.querySelector(".playBtn").classList.replace("fa-play","fa-pause")
+      }
+      function stepMusic(e) {
+        audioEl.duration = Number(e.target.value) * 10000;
+        audioEl.play();
+      }
+      function playNextSong(e) {
+        e.target.previousElementSibling.classList.replace(
+          "fa-play",
+          "fa-pause"
+        );
+        index++;
+        if(index>songs.length-1) index=0
+        audioEl.src = songs[index].songUrl;
+        updateIcon()
+        audioEl.play();
+      }
+
+      function playPreviousSong(e) {
+        e.target.nextElementSibling.classList.replace(
+          "fa-play",
+          "fa-pause"
+        );
+          index--;
+        if(index<0) index=songs.length-1
+        audioEl.src = songs[index].songUrl;
+        updateIcon()
+        audioEl.play();
+      }
+      function updateIcon() {
+        if(document.querySelector(".show"))
+        document.querySelector(".show").classList.replace("show","hide");
+        document.querySelectorAll(".icon")[index].classList.add("show")
+      }
+      function checkIcon(e) {
+        if (e.classList.contains("fa-play")) {
+          e.classList.replace("fa-play", "fa-pause");
+          audioEl.play()
+        } else {
+          e.classList.replace("fa-pause", "fa-play");
+        document.querySelectorAll(".icon")[index].classList.remove("show")
+
+          audioEl.pause()
+        }
+      }
+      function playMusic(e){
+        updateIcon()
+        checkIcon(e.target)
+        // updateIcon()
+        // audioEl.play()
+      }
+    </script>
+  </body>
+</html>

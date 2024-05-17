@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <style>
+      li {
+        list-style: none;
+      }
+    </style>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <div
+      class="container-fluid d-flex justify-content-center align-items-center"
+      style="height: 70vh"
+    ></div>
+    <script>
+      let questions;
+      let index = 0;
+      async function getQuestions() {
+        return (await fetch("http://localhost:5088/api/mcqs")).json();
+      }
+      getQuestions().then((response) => {
+        questions = response.result;
+        updateQuestion(questions);
+      });
+      function updateQuestion(questions) {
+        let options = questions[index].options.map((opt) => {
+          return ` 
+            <li>
+              <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                value="${opt.value}"
+                id="flexRadioDefault1"
+                onclick="checkAnswer(event)"
+              />
+              ${opt.option}
+            </li>`;
+        });
+        document.querySelector(".container-fluid").innerHTML = `
+<div class="card" style="width: 38rem">
+        <div class="card-body">
+          <h5 class="card-title">Question ${index + 1}</h5>
+          <h2 class="card-subtitle mb-2 text-body-secondary">${
+            questions[index].question
+          }</h2>
+          <ul>
+          ${options.join("")}
+          </ul>
+        </div>
+      </div>`;
+      }
+      function checkAnswer(e) {
+        check({
+          id: questions[index].id,
+          correct: e.target.value,
+        }).then((response) => {
+          if (response.result) {
+            index++;
+            if (index > questions.length - 1) index = 0;
+            updateQuestion(questions);
+          } else {
+            alert("Wrong answer");
+          }
+        });
+      }
+
+      async function check(model) {
+        return (
+          await fetch("http://localhost:5088/api/mcqs/checkanswer", {
+            method: "POST",
+            body: JSON.stringify(model),
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+        ).json();
+      }
+
+      function add(x, y) {
+        return () => {
+          return () => {
+            return x + y;
+          };
+        };
+      }
+      console.log(add(20, 30)()());
+      let names = ["raheel", "burhan"];
+      class Student {
+        name;
+        age;
+        name() {
+          let age = 0;
+        }
+      }
+
+      Array.prototype.Any = function (callBack) {
+        for (let index = 0; index < this.length; index++) {
+          if (callBack(this[index])) {
+            return true;
+          }
+        }
+        return false;
+      };
+      console.log(names.Any((x) => x === "raheel"));
+      Array.prototype.All = function (callBack) {
+        let allSatisfies = false;
+        for (let index = 0; index < this.length; index++) {
+          allSatisfies = callBack(this[index]);
+        }
+        return allSatisfies;
+      };
+      console.log(names.All((x) => typeof x === "string"));
+      Array.prototype.First = function () {
+        if (this[0]) {
+          return this[0];
+        }
+        throw new Error("No element found on this array");
+      };
+      console.log(names.First());
+
+      Array.prototype.FirstOrDefault = function (callBack) {
+        for (let index = 0; index < this.length; index++) {
+          if (callBack(this[index])) {
+            return this[index];
+          }
+        }
+        return undefined;
+      };
+      console.log(names.FirstOrDefault((x) => x.startsWith("i")));
+      function hello(){
+
+      }
+      console.log(typeof hello);
+      
+
+    </script>
+  </body>
+</html>
