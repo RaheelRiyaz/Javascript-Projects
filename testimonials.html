@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonials</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .main {
+      width: 40%;
+      min-height: 250px;
+      height: auto;
+      border: 2px solid;
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+    }
+    img {
+      height: 200px;
+      width: 200px;
+      border-radius: 50%;
+    }
+  </style>
+  <body>
+    <div class="main">
+      <img src="" id="img" alt="" />
+      <h1 id="name"></h1>
+      <p id="paragraph"></p>
+    </div>
+    <script>
+      const slides = [
+        {
+          name: "Ankita",
+          url: "https://static.vecteezy.com/system/resources/thumbnails/007/209/020/small/close-up-shot-of-happy-dark-skinned-afro-american-woman-laughs-positively-being-in-good-mood-dressed-in-black-casual-clothes-isolated-on-grey-background-human-emotions-and-feeligs-concept-photo.jpg",
+          text: "Ankita, ipsum dolor sit amet consectetur adipisicing elit. Corporis ullam ipsa dolores pariatur temporibus magnam eaque similique, totam voluptatibus corrupti possimus deserunt eveniet sunt alias perspiciati enim illum architecto reiciendis? Tempore vitae veniam illo dignissimo sed provident nostrum. Et nulla rerum debitis? In, voluptatum ut",
+        },
+        {
+          name: "Suhail",
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMdxoy_bHgIrEGckeVLqGRxU2DmHTjKPVJjKFF4F_oiw&s",
+          text: "Suhail, ipsum dolor sit amet consectetur adipisicing elit. Corporis ullam ipsa dolores pariatur temporibus magnam eaque similique, totam voluptatibus corrupti possimus deserunt eveniet sunt alias perspiciati enim illum architecto reiciendis? Tempore vitae veniam illo dignissimo sed provident nostrum. Et nulla rerum debitis? In, voluptatum ut",
+        },
+        {
+          name: "Aslam",
+          url: "https://images.unsplash.com/photo-1545996124-0501ebae84d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8Mnw0M2FxWmhXTVBITXx8ZW58MHx8fHx8&w=1000&q=80",
+          text: "Aslam, ipsum dolor sit amet consectetur adipisicing elit. Corporis ullam ipsa dolores pariatur temporibus magnam eaque similique, totam voluptatibus corrupti possimus deserunt eveniet sunt alias perspiciati enim illum architecto reiciendis? Tempore vitae veniam illo dignissimo sed provident nostrum. Et nulla rerum debitis? In, voluptatum ut",
+        },
+      ];
+
+      let index = Math.floor(Math.random() * slides.length);
+
+      updateTestimonial();
+      function updateTestimonial() {
+        img.src = slides[index].url;
+        paragraph.innerText = slides[index].text;
+        document.querySelector("#name").innerHTML = slides[index].name;
+      }
+
+      setInterval(() => {
+        index++;
+        if (index > slides.length - 1) index = 0;
+        updateTestimonial();
+      }, 3000);
+    </script>
+  </body>
+</html>
