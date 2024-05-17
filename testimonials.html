@@ -17,6 +17,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-color: whitesmoke;
     }
     .main {
       width: 40%;
@@ -65,6 +66,7 @@
       let index = Math.floor(Math.random() * slides.length);
 
       updateTestimonial();
+
       function updateTestimonial() {
         img.src = slides[index].url;
         paragraph.innerText = slides[index].text;
@@ -73,7 +75,8 @@
 
       setInterval(() => {
         index++;
-        if (index > slides.length - 1) index = 0;
+        if (index > slides.length - 1) 
+        index = 0;
         updateTestimonial();
       }, 3000);
     </script>
