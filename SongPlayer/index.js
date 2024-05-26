@@ -5,7 +5,9 @@ const range = document.querySelector("#range");
 const playBtn = document.querySelector("#play");
 const durationEL = document.querySelector("#duration");
 const currentDuration = document.querySelector("#currentDuration");
+const popUp = document.querySelector("#pop-up");
 
+let loopMode = 1;
 const BASEURL = "./songs/";
 let index = 0;
 let songsList = [];
@@ -74,6 +76,26 @@ function playPrevious() {
   checkPlay();
 }
 
+function handleLoop(e) {
+  if (e.target.classList.contains("fa-arrow-right-arrow-left")) {
+    e.target.classList.replace("fa-arrow-right-arrow-left", "fa-arrows-rotate");
+    loopMode = 2;
+    popUp.innerHTML = "Playlist is looped";
+  } else if (e.target.classList.contains("fa-arrows-rotate")) {
+    e.target.classList.replace("fa-arrows-rotate", "fa-arrows-spin");
+    popUp.innerHTML = "Current song is looped";
+    loopMode = 3;
+  } else {
+    e.target.classList.replace("fa-arrows-spin", "fa-arrow-right-arrow-left");
+    loopMode = 1;
+    popUp.innerHTML = "Random mode is on";
+  }
+  popUp.classList.remove("hide");
+  setTimeout(() => {
+    popUp.classList.add("hide");
+  }, 1000);
+}
+
 range.addEventListener("input", () => {
   audio.currentTime = range.value;
 });
@@ -84,3 +106,21 @@ function checkPlay() {
     audio.play();
   }
 }
+
+audio.addEventListener("ended", (e) => {
+  switch (loopMode) {
+    case 2:
+      playNext();
+      break;
+    case 3:
+      index = index;
+      updateMusicSection(songsList);
+      console.log(index);
+      break;
+    default:
+      index = Math.floor(Math.random() * songsList.length);
+      updateMusicSection(songsList);
+      break;
+  }
+  audio.play();
+});
