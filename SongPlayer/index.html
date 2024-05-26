@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Song Player</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <audio src="./songs/.mp3"></audio>
+  </head>
+  <body>
+    <div class="main">
+      <div class="cover">
+        <img
+          id="thumbnail"
+          src="https://c.saavncdn.com/677/Do-Lafzon-Ki-Kahani-Hindi-2016-500x500.jpg"
+          alt=""
+        />
+        <h2 id="song-name"></h2>
+
+        <h5 id="artist-name"></h5>
+      </div>
+      <div class="controls">
+        <input id="range" type="range" value="0" name="" id="" />
+        <div class="durations">
+          <span id="currentDuration"></span>
+          <span id="duration"></span>
+        </div>
+        <div class="btns">
+          <i onclick="playPrevious()" class="fa-solid fa-backward"></i>
+          <i id="play" class="fa-solid fa-play"></i>
+          <i onclick="playNext()" class="fa-solid fa-forward"></i>
+        </div>
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

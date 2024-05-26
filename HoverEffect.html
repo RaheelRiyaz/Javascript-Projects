@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hover Effecr</title>
+  </head>
+  <style>
+    .blur {
+      filter: blur(5px);
+    }
+    .btn {
+      cursor: pointer;
+      height: 30px;
+      width: 100px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: none;
+      border: 0;
+      box-shadow: 2px 2px 2px gray;
+    }
+    .flex {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 500px;
+      margin: 20px auto;
+    }
+  </style>
+  <div class="flex">
+    <button id="btn-1" class="btn">Button 1</button>
+    <button id="btn-2" class="btn">Button 3</button>
+    <button id="btn-3" class="btn">Button 3</button>
+  </div>
+  <body>
+    <script>
+      const btns = document.querySelectorAll(".btn");
+
+      btns.forEach((btn) => {
+        btn.addEventListener("mouseover", (e) => {
+          btns.forEach((btn) => {
+            if (btn.id !== e.target.id) btn.classList.add("blur");
+          });
+        });
+      });
+
+      btns.forEach((btn) => {
+        btn.addEventListener("mouseout", (e) => {
+          btns.forEach((btn) => {
+            btn.classList.remove("blur");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
