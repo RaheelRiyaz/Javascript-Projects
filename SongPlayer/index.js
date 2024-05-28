@@ -124,3 +124,30 @@ audio.addEventListener("ended", (e) => {
   }
   audio.play();
 });
+
+const array = [
+  { name: "name" },
+  { name: "age" },
+  { name: "contactNo" },
+  { name: "age" },
+];
+
+var obj = {
+  name: "raheel",
+  age: "120",
+};
+
+const keys = Object.keys(obj);
+function checkName() {
+  for (const element of array) {
+    const isExists = keys.some(_ => _ === element.name);
+    if (!isExists) {
+      return `${element.name} is required`; 
+    }
+  }
+
+  return true;
+}
+
+console.log(checkName());
+
