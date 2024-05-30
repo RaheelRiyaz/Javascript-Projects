@@ -53,6 +53,92 @@
           });
         });
       });
+
+      const items = [
+        {
+          id: 1,
+          name: "Raheel",
+          age: 20,
+          contactNo: 7006770232,
+        },
+        {
+          id: 2,
+          name: "Suhail",
+          age: 21,
+          contactNo: 700672637,
+        },
+        {
+          id: 3,
+          name: "Burhan",
+          age: 24,
+          contactNo: 7006340232,
+        },
+      ];
+
+      //#region  Custom methods
+
+      //FirstOrDefault
+      Array.prototype.FirstOrDefault = function () {
+        if (this.length === 0) return null;
+
+        return this[0];
+      };
+
+      //FirstOrDefault
+
+      //Project
+      Object.prototype.Project = function (...props) {
+        let projectedResult = {};
+        for (let index = 0; index < props.length; index++) {
+          if (!this.hasOwnProperty(props[index]))
+            throw new Error(`${props[index]} doesn't exists`);
+
+          projectedResult = {
+            ...projectedResult,
+            [props[index]]: this[props[index]],
+          };
+        }
+        return projectedResult;
+      };
+      //Project
+
+      //Filter
+      Array.prototype.Filter = function (callback) {
+        let filteredResult = [];
+
+        for (let index = 0; index < this.length; index++) {
+          const hasSatisfiedCondition = callback(this[index]);
+          if (hasSatisfiedCondition) filteredResult.push(this[index]);
+        }
+        return filteredResult;
+      };
+      //Filter
+
+      Array.prototype.FindOne = function (callBack) {
+        for (let index = 0; index < this.length; index++) {
+          const isTrue = callBack(this[index]);
+          if (isTrue) return this[index];
+        }
+
+        return undefined;
+      };
+      //#endregion
+      const filteredResult = items.Filter((num) => {
+        return num.id === 1;
+      });
+      const first = filteredResult
+        .FirstOrDefault()
+        .Project("id", "name", "contactNo");
+      console.log(items.FindOne((_) => _.id === 1));
+
+
+      //#region Shallow copy
+      const one = { name: "raheel", list: [1, 2, 3] };
+      const two = { ...one };
+      two.list.pop()
+      console.log(two);
+      console.log(one);
+      //#endregion
     </script>
   </body>
 </html>
