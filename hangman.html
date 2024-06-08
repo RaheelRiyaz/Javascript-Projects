@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hangman</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: whitesmoke;
+      }
+      .word-container {
+        width: 70%;
+        margin: auto;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 20px;
+        box-shadow: 12px 13px 16px 1px #bdb7b7;
+        align-items: center;
+        background: white;
+      }
+      #word {
+        font-size: 3rem;
+      }
+      #hint {
+        font-size: 1rem;
+      }
+      .keyboard {
+        padding: 12px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        width: 55%;
+        margin: 20px auto;
+      }
+      .letter {
+        background-color: rgb(140, 198, 140);
+        padding: 5px;
+        border-radius: 50%;
+        height: 3rem;
+        width: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 1.5rem;
+        margin-top: 10px;
+      }
+      .highlight {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hangman">
+      <div class="word-container">
+        <div id="word"></div>
+        <div class="hint"></div>
+        <div class="keyboard"></div>
+      </div>
+    </div>
+    <script>
+      const hangmanWords = [
+        {
+          title: "apple",
+          hint: "A common fruit that can be red, green, or yellow.",
+        },
+        { title: "elephant", hint: "The largest land animal." },
+        {
+          title: "guitar",
+          hint: "A musical instrument with strings, often used in rock music.",
+        },
+        {
+          title: "jazz",
+          hint: "A genre of music that originated in the African-American communities.",
+        },
+        {
+          title: "kangaroo",
+          hint: "An animal native to Australia that hops and has a pouch.",
+        },
+        {
+          title: "mountain",
+          hint: "A large natural elevation of the earth's surface.",
+        },
+        {
+          title: "pyramid",
+          hint: "Ancient structures found in Egypt, often used as tombs.",
+        },
+        { title: "whale", hint: "The largest mammal in the ocean." },
+        {
+          title: "umbrella",
+          hint: "A device used for protection against rain or sun.",
+        },
+        {
+          title: "volcano",
+          hint: "A mountain that can erupt with lava, ash, and gases.",
+        },
+        {
+          title: "yacht",
+          hint: "A large boat used for private cruises or racing.",
+        },
+        {
+          title: "robot",
+          hint: "A machine capable of carrying out a complex series of actions automatically.",
+        },
+        {
+          title: "diamond",
+          hint: "A precious gemstone often used in jewelry.",
+        },
+        { title: "island", hint: "A piece of land surrounded by water." },
+        {
+          title: "zebra",
+          hint: "An African animal with black and white stripes.",
+        },
+      ];
+
+      const audio = new Audio("./audious/pop-39222.mp3");
+      let index = 0;
+
+      function updateBody() {
+        let currentWord = hangmanWords[index];
+        let randomIndexes = generateIndexes(currentWord);
+        let word = [...currentWord.title.toUpperCase()];
+        for (const index of randomIndexes) {
+          word[index] = "_ ";
+        }
+        const reassembledWOrd = word.map((_) => {
+          return `<span class="span">${_}</span>`;
+        });
+        document.querySelector("#word").innerHTML = reassembledWOrd.join("");
+        document.querySelector(
+          ".hint"
+        ).innerHTML = `<span>Hint : <i id="hint">${currentWord.hint}</i></span>`;
+      }
+
+      document.addEventListener("DOMContentLoaded", updateBody);
+
+      function generateIndexes({ title: { length } }) {
+        let randomIndexes = [];
+        for (let index = 0; index < Math.floor(length / 2); index++) {
+          const randomIndex = Math.floor(Math.random() * length);
+          if (randomIndexes.some((_) => _ === randomIndex)) {
+            length++;
+            continue;
+          } else randomIndexes.push(randomIndex);
+        }
+        return randomIndexes;
+      }
+      const letters = [...Array(26)].map((_, i) => String.fromCharCode(65 + i));
+      (function updateKeyboard() {
+        letters.map((_, i) => {
+          document.querySelector(
+            ".keyboard"
+          ).innerHTML += `<b class="letter" onclick="checkLetter(${i})">${_}</b>`;
+        });
+      })();
+
+      function checkLetter(i) {
+        audio.play();
+        const letter = letters[i];
+        const word = hangmanWords[index].title;
+        const wordClone = Array.from(word);
+        let indexes = [];
+        const filteredhangmanWords = wordClone.filter(
+          (_) => _ === letter.toLowerCase()
+        );
+
+        wordClone.forEach((w, i) => {
+          const exist = filteredhangmanWords.some((_) => _ === w);
+          if (exist) indexes.push(i);
+        });
+
+        const html = document.querySelectorAll(".span");
+
+        indexes.forEach((_) => {
+          if (!html[_].innerHTML.compare(wordClone[_])) {
+            html[_].innerHTML = wordClone[_].toUpperCase();
+            html[_].classList.add("highlight");
+          }
+        });
+        setTimeout(() => {
+          checkWin();
+        }, 500);
+      }
+
+      function checkWin() {
+        const html = document.querySelectorAll(".span");
+        const domWord = Array.from(html)
+          .map((_) => _.innerHTML)
+          .join("");
+        if (hangmanWords[index].title.compare(domWord)) {
+          index++;
+          if (index === hangmanWords.length) index = 0;
+          updateBody();
+        }
+      }
+
+      String.prototype.compare = function (targetString) {
+        return this.localeCompare(targetString, undefined, {
+          sensitivity: "base",
+        }) === 0
+          ? true
+          : false;
+      };
+    </script>
+  </body>
+</html>
