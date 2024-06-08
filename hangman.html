@@ -174,7 +174,7 @@
         const wordClone = Array.from(word);
         let indexes = [];
         const filteredhangmanWords = wordClone.filter(
-          (_) => _ === letter.toLowerCase()
+          (_) => _.compare(letter);
         );
 
         wordClone.forEach((w, i) => {
