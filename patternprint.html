@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pattern Print</title>
+  </head>
+  <style>
+    .bold {
+      font-size: 2rem;
+      margin-left: 20px;
+    }
+  </style>
+  <body>
+    <script>
+      function createPattern(length = 5, isAscending = true) {
+        let html = "";
+        if (isAscending) {
+          for (let index = 0; index < length; index++) {
+            let HTML = "";
+            for (let i = 0; i < index + 1; i++) {
+              HTML += "*";
+            }
+            html += `<div class="bold">${HTML}</div>`;
+          }
+        } else {
+          for (let index = length; index >= 0; index--) {
+            let HTML = "";
+            for (let i = 0; i < index + 1; i++) {
+              HTML += "*";
+            }
+            html += `<div class="bold">${HTML}</div>`;
+          }
+        }
+        document.body.innerHTML = html;
+      }
+      createPattern(10);
+    </script>
+  </body>
+</html>
