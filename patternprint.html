@@ -73,6 +73,41 @@
 
       let string = "raheel@gmail.com";
       string.Split("@");
+
+      Array.prototype.Splice = function (startingIndex, lastIndex) {
+        const resultingArray = [];
+        const returningArray = [];
+
+        // if (startingIndex === lastIndex) lastIndex = lastIndex + 1;
+        for (
+          let index = startingIndex;
+          index < startingIndex + lastIndex;
+          index++
+        ) {
+          resultingArray.push(this[index]);
+        }
+        const filteredResult = this.filter((_) => {
+          return !resultingArray.some((el) => el === _);
+        });
+
+        this.length = 0;
+        filteredResult.forEach((_) => this.push(_));
+        // console.log(resultingArray, "Resulting Array");
+        // console.log(filteredResult, "Filtered Array");
+        return resultingArray;
+      };
+
+      const array1 = [12, 2, 4, 5];
+      const arr1 = array1.splice(0, 2);
+      console.log(arr1, "spliced values");
+      console.log(array1, "Original array1 array");
+
+      console.log("///////////////");
+
+      const array2 = [12, 2, 4, 5];
+      const arr2 = array2.Splice(0, 2);
+      console.log(arr2, "Spliced values");
+      console.log(array2, "Original array2 array");
     </script>
   </body>
 </html>
